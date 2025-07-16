@@ -23,6 +23,17 @@ interface DataSource {
   color: string;
 }
 
+// Client-only timestamp component to prevent hydration mismatch
+function TimeDisplay({ timestamp }: { timestamp: Date }) {
+  const [timeString, setTimeString] = useState<string>('');
+
+  useEffect(() => {
+    setTimeString(timestamp.toLocaleTimeString());
+  }, [timestamp]);
+
+  return <span suppressHydrationWarning>{timeString}</span>;
+}
+
 const dataSources: DataSource[] = [
   {
     id: 'ncc-financial',
@@ -330,7 +341,7 @@ export default function HomePage() {
                   )}
 
                   <div className="text-xs text-gray-500 mt-2">
-                    {message.timestamp.toLocaleTimeString()}
+                    <TimeDisplay timestamp={message.timestamp} />
                   </div>
                 </div>
               </div>
