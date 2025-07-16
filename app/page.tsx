@@ -60,6 +60,7 @@ export default function HomePage() {
   const [selectedDataSource, setSelectedDataSource] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMountedRef = useRef<boolean>(true);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -68,6 +69,14 @@ export default function HomePage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Cleanup effect to prevent state updates on unmounted component
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -82,6 +91,7 @@ export default function HomePage() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+
 
     try {
       // Determine which agent to use based on query or selected data source
@@ -122,7 +132,7 @@ export default function HomePage() {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (isMountedRef.current && data.success) {
         const assistantMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
@@ -134,7 +144,7 @@ export default function HomePage() {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
-      } else {
+      } else if (isMountedRef.current) {
         const errorMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant', 
@@ -145,15 +155,19 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: `Sorry, I'm having trouble processing your request. Error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      if (isMountedRef.current) {
+        const errorMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: `Sorry, I'm having trouble processing your request. Error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
     } finally {
-      setIsLoading(false);
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 
