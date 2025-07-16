@@ -5,6 +5,14 @@ import { logger } from '@/lib/utils/logger';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check environment variables first
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        { error: 'ANTHROPIC_API_KEY not configured' },
+        { status: 500 }
+      );
+    }
+
     const { topic, query, leadAgentId, collaboratingAgentIds } = await request.json();
 
     // Validate input
@@ -16,7 +24,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Initialize agents if not already done
-    await agentFactory.initialize();
+    try {
+      await agentFactory.initialize();
+    } catch (initError) {
+      logger.error('Agent factory initialization failed', initError);
+      return NextResponse.json(
+        { error: 'Failed to initialize agents', details: String(initError) },
+        { status: 500 }
+      );
+    }
 
     // Start the collaboration
     const collaborationId = await collaborationManager.startCollaboration(

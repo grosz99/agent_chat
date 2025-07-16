@@ -108,36 +108,17 @@ export default function HomePage() {
 
       let response;
       
-      if (isMultiAgent) {
-        // Use agent collaboration
-        response = await fetch('/api/agents/collaborate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            topic: 'Multi-Agent Data Analysis',
-            query: input.trim(),
-            leadAgentId: agentId,
-            collaboratingAgentIds: dataSources
-              .filter(ds => ds.id !== agentId)
-              .map(ds => ds.id)
-          })
-        });
-      } else {
-        // Single agent query
-        response = await fetch('/api/agents/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            agentId,
-            query: input.trim(),
-            context: {
-              conversationId: 'main-chat',
-              userId: 'user-1',
-              history: messages.slice(-5) // Last 5 messages for context
-            }
-          })
-        });
-      }
+      // Temporarily use simple test endpoint due to production issues
+      response = await fetch('/api/simple-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: input.trim(),
+          agentId,
+          isMultiAgent,
+          type: isMultiAgent ? 'collaboration' : 'single-agent'
+        })
+      });
 
       const data = await response.json();
 
