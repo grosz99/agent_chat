@@ -35,10 +35,24 @@ export class SnowflakeConnection {
       logger.info('Connecting to Snowflake...', { account: this.config.account });
 
       // Read the private key for JWT authentication
-      const privateKey = process.env.SNOWFLAKE_PRIVATE_KEY || 
+      let privateKey = process.env.SNOWFLAKE_PRIVATE_KEY || 
         (this.config.privateKeyPath 
           ? fs.readFileSync(this.config.privateKeyPath, 'utf8')
           : undefined);
+
+      // Clean up the private key format if from environment variable
+      if (privateKey && process.env.SNOWFLAKE_PRIVATE_KEY) {
+        // Replace pipe separators with newlines
+        if (privateKey.includes('|')) {
+          privateKey = privateKey.replace(/\|/g, '\n');
+        }
+        
+        // Clean up any extra whitespace and ensure proper newlines
+        privateKey = privateKey
+          .replace(/\r\n/g, '\n')  // Normalize line endings
+          .replace(/\n+/g, '\n')   // Remove multiple consecutive newlines
+          .trim();
+      }
 
       const connectionConfig: any = {
         account: this.config.account,

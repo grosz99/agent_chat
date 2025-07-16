@@ -71,10 +71,24 @@ export async function POST(request: NextRequest) {
     let connectionConfig: any;
     
     if (process.env.SNOWFLAKE_PRIVATE_KEY) {
+      // Clean up the private key format - handle pipe separators from Vercel
       let privateKey = process.env.SNOWFLAKE_PRIVATE_KEY;
+      
+      // Replace pipe separators with newlines
+      if (privateKey.includes('|')) {
+        privateKey = privateKey.replace(/\|/g, '\n');
+      }
+      
+      // Ensure proper PEM format
       if (!privateKey.includes('-----BEGIN')) {
         privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
       }
+      
+      // Clean up any extra whitespace and ensure proper newlines
+      privateKey = privateKey
+        .replace(/\r\n/g, '\n')  // Normalize line endings
+        .replace(/\n+/g, '\n')   // Remove multiple consecutive newlines
+        .trim();
       
       connectionConfig = {
         account: process.env.SNOWFLAKE_ACCOUNT,
