@@ -1,0 +1,21 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "env": {
+    "SNOWFLAKE_ACCOUNT": "@snowflake_account",
+    "SNOWFLAKE_USERNAME": "@snowflake_username", 
+    "SNOWFLAKE_PASSWORD": "@snowflake_password",
+    "SNOWFLAKE_PRIVATE_KEY": "@snowflake_private_key",
+    "SNOWFLAKE_DATABASE": "@snowflake_database",
+    "SNOWFLAKE_WAREHOUSE": "@snowflake_warehouse",
+    "SNOWFLAKE_SCHEMA": "@snowflake_schema",
+    "SNOWFLAKE_ROLE": "@snowflake_role",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key"
+  },
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
