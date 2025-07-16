@@ -129,9 +129,14 @@ export default function HomePage() {
 
       let response;
       
-      // Test direct Snowflake connection to diagnose production issues
-      response = await fetch('/api/test-snowflake-direct', {
-        method: 'GET'
+      // Use working Snowflake query endpoint for real data responses
+      response = await fetch('/api/snowflake-query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: input.trim(),
+          agentId
+        })
       });
 
       const data = await response.json();
