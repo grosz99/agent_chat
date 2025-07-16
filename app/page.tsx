@@ -163,10 +163,11 @@ export default function HomePage() {
         setMessages(prev => [...prev, errorMessage]);
       }
     } catch (error) {
+      console.error('Error sending message:', error);
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Sorry, I\'m having trouble processing your request. Please try again.',
+        content: `Sorry, I'm having trouble processing your request. Error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -392,8 +393,8 @@ export default function HomePage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask me about your data... (e.g., 'What are the top regions by revenue?')"
-              className="flex-1 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+              className="flex-1 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black bg-white"
+              style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', color: '#000000' }}
               rows={2}
               disabled={isLoading}
             />
