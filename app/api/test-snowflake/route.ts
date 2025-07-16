@@ -8,7 +8,7 @@ export async function GET() {
     // Check environment variables
     const requiredEnvs = {
       SNOWFLAKE_ACCOUNT: process.env.SNOWFLAKE_ACCOUNT,
-      SNOWFLAKE_USERNAME: process.env.SNOWFLAKE_USERNAME,
+      SNOWFLAKE_USER: process.env.SNOWFLAKE_USER,
       SNOWFLAKE_PASSWORD: process.env.SNOWFLAKE_PASSWORD,
       SNOWFLAKE_DATABASE: process.env.SNOWFLAKE_DATABASE,
       SNOWFLAKE_WAREHOUSE: process.env.SNOWFLAKE_WAREHOUSE,
@@ -31,7 +31,7 @@ export async function GET() {
     // Create connection
     const connectionConfig = {
       account: process.env.SNOWFLAKE_ACCOUNT!,
-      username: process.env.SNOWFLAKE_USERNAME!,
+      username: process.env.SNOWFLAKE_USER!,
       password: process.env.SNOWFLAKE_PASSWORD!,
       database: process.env.SNOWFLAKE_DATABASE!,
       schema: process.env.SNOWFLAKE_SCHEMA!,

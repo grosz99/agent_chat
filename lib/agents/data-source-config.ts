@@ -19,7 +19,7 @@ export const dataSourceConfigs: DataSourceConfig[] = [
     type: 'snowflake',
     connectionConfig: {
       account: process.env.SNOWFLAKE_ACCOUNT,
-      username: process.env.SNOWFLAKE_USERNAME,
+      username: process.env.SNOWFLAKE_USER,
       authenticator: 'SNOWFLAKE_JWT',
       privateKey: process.env.SNOWFLAKE_PRIVATE_KEY?.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n').trim(),
       database: process.env.SNOWFLAKE_DATABASE,
@@ -164,7 +164,7 @@ def adjustment_analysis(df):
     type: 'snowflake',
     connectionConfig: {
       account: process.env.SNOWFLAKE_ACCOUNT,
-      username: process.env.SNOWFLAKE_USERNAME,
+      username: process.env.SNOWFLAKE_USER,
       authenticator: 'SNOWFLAKE_JWT',
       privateKey: process.env.SNOWFLAKE_PRIVATE_KEY?.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n').trim(),
       database: process.env.SNOWFLAKE_DATABASE,
@@ -316,7 +316,7 @@ def office_capacity_analysis(df):
     type: 'snowflake',
     connectionConfig: {
       account: process.env.SNOWFLAKE_ACCOUNT,
-      username: process.env.SNOWFLAKE_USERNAME,
+      username: process.env.SNOWFLAKE_USER,
       authenticator: 'SNOWFLAKE_JWT',
       privateKey: process.env.SNOWFLAKE_PRIVATE_KEY?.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n').trim(),
       database: process.env.SNOWFLAKE_DATABASE,

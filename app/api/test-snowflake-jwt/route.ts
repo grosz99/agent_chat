@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     // Environment variable check
     const requiredEnvVars = [
       'SNOWFLAKE_ACCOUNT',
-      'SNOWFLAKE_USERNAME', 
+      'SNOWFLAKE_USER', 
       'SNOWFLAKE_DATABASE',
       'SNOWFLAKE_WAREHOUSE',
       'SNOWFLAKE_SCHEMA',
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     
     const connectionConfig = {
       account: process.env.SNOWFLAKE_ACCOUNT!,
-      username: process.env.SNOWFLAKE_USERNAME!,
+      username: process.env.SNOWFLAKE_USER!,
       authenticator: 'SNOWFLAKE_JWT',
       privateKey: privateKey,
       database: process.env.SNOWFLAKE_DATABASE!,

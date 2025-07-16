@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     
     const requiredEnvs = [
       'SNOWFLAKE_ACCOUNT',
-      'SNOWFLAKE_USERNAME', 
+      'SNOWFLAKE_USER', 
       'SNOWFLAKE_DATABASE',
       'SNOWFLAKE_WAREHOUSE',
       'SNOWFLAKE_SCHEMA',
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       
       connectionConfig = {
         account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USERNAME,
+        username: process.env.SNOWFLAKE_USER,
         authenticator: 'SNOWFLAKE_JWT',
         privateKey: privateKey,
         database: process.env.SNOWFLAKE_DATABASE,
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       
       connectionConfig = {
         account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USERNAME,
+        username: process.env.SNOWFLAKE_USER,
         password: process.env.SNOWFLAKE_PASSWORD,
         database: process.env.SNOWFLAKE_DATABASE,
         warehouse: process.env.SNOWFLAKE_WAREHOUSE,
@@ -152,7 +152,7 @@ export async function GET(request: NextRequest) {
       message: 'Direct Snowflake connection successful',
       connectionInfo: {
         account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USERNAME,
+        username: process.env.SNOWFLAKE_USER,
         database: process.env.SNOWFLAKE_DATABASE,
         warehouse: process.env.SNOWFLAKE_WAREHOUSE,
         schema: process.env.SNOWFLAKE_SCHEMA,
