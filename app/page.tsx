@@ -129,16 +129,9 @@ export default function HomePage() {
 
       let response;
       
-      // Temporarily use simple test endpoint due to production issues
-      response = await fetch('/api/simple-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: input.trim(),
-          agentId,
-          isMultiAgent,
-          type: isMultiAgent ? 'collaboration' : 'single-agent'
-        })
+      // Test direct Snowflake connection to diagnose production issues
+      response = await fetch('/api/test-snowflake-direct', {
+        method: 'GET'
       });
 
       const data = await response.json();
