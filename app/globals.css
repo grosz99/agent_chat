@@ -138,3 +138,16 @@ input:focus, textarea:focus {
     opacity: .5;
   }
 }
+
+/* Chat message contrast fix */
+.chat-message {
+  color: #000000 !important;
+}
+
+.chat-message.user {
+  color: #ffffff !important;
+}
+
+.chat-message.system {
+  color: #374151 !important;
+}

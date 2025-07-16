@@ -289,12 +289,12 @@ export default function HomePage() {
                 }`}
               >
                 <div
-                  className={`max-w-3xl rounded-lg p-4 ${
+                  className={`max-w-3xl rounded-lg p-4 chat-message ${
                     message.role === 'user'
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-blue-500 text-white user'
                       : message.role === 'system'
-                      ? 'bg-gray-100 text-gray-700'
-                      : 'bg-white border border-gray-200'
+                      ? 'bg-gray-100 text-gray-800 system'
+                      : 'bg-white border border-gray-200 text-black'
                   }`}
                   style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
@@ -309,7 +309,7 @@ export default function HomePage() {
                     </div>
                   )}
                   
-                  <div className="whitespace-pre-wrap" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{message.content}</div>
+                  <div className="whitespace-pre-wrap text-black" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{message.content}</div>
                   
                   {message.data && message.data.length > 0 && (
                     <div className="mt-3 p-3 bg-gray-50 rounded border">
