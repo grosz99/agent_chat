@@ -149,10 +149,33 @@ export default function HomePage() {
 
         setMessages(prev => [...prev, assistantMessage]);
       } else if (isMountedRef.current) {
+        // Show detailed error information including missing env vars
+        let errorContent = `Sorry, I encountered an error: ${data.error}`;
+        
+        if (data.missing && data.missing.length > 0) {
+          errorContent += `\n\nMissing environment variables: ${data.missing.join(', ')}`;
+        }
+        
+        if (data.available && data.available.length > 0) {
+          errorContent += `\n\nAvailable environment variables: ${data.available.join(', ')}`;
+        }
+        
+        if (data.allSnowflakeEnvVars && data.allSnowflakeEnvVars.length > 0) {
+          errorContent += `\n\nAll Snowflake env vars found: ${data.allSnowflakeEnvVars.join(', ')}`;
+        }
+        
+        if (data.envVarDetails) {
+          errorContent += `\n\nEnvironment variable status: ${JSON.stringify(data.envVarDetails, null, 2)}`;
+        }
+        
+        if (data.details) {
+          errorContent += `\n\nDetails: ${data.details}`;
+        }
+
         const errorMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant', 
-          content: `Sorry, I encountered an error: ${data.error}`,
+          content: errorContent,
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);

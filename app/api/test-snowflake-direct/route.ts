@@ -5,7 +5,9 @@ export async function GET(request: NextRequest) {
   try {
     console.log('Starting direct Snowflake connection test...');
     
-    // Check environment variables
+    // Check environment variables - show all available first
+    const allEnvVars = Object.keys(process.env).filter(key => key.startsWith('SNOWFLAKE_') || key.startsWith('ANTHROPIC_'));
+    
     const requiredEnvs = [
       'SNOWFLAKE_ACCOUNT',
       'SNOWFLAKE_USERNAME', 
@@ -16,11 +18,19 @@ export async function GET(request: NextRequest) {
     ];
 
     const missing = requiredEnvs.filter(env => !process.env[env]);
+    const available = requiredEnvs.filter(env => !!process.env[env]);
+    
     if (missing.length > 0) {
       return NextResponse.json({
         error: 'Missing environment variables',
         missing,
-        available: requiredEnvs.filter(env => !!process.env[env])
+        available,
+        allSnowflakeEnvVars: allEnvVars,
+        envVarDetails: allEnvVars.reduce((acc: any, key) => {
+          acc[key] = process.env[key] ? 'SET' : 'NOT_SET';
+          return acc;
+        }, {}),
+        nodeEnv: process.env.NODE_ENV
       }, { status: 400 });
     }
 
