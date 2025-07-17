@@ -176,8 +176,13 @@ export default function HomePage() {
           insights: data.response?.insights || data.insights
         };
 
-        // Show the message immediately with the agent flow
-        setMessages(prev => [...prev, assistantMessage]);
+        // Wait for minimum demo time before showing results (let animation run)
+        const minDemoTime = 8000; // 8 seconds minimum
+        setTimeout(() => {
+          if (isMountedRef.current) {
+            setMessages(prev => [...prev, assistantMessage]);
+          }
+        }, minDemoTime);
       } else if (isMountedRef.current) {
         // Show detailed error information including missing env vars
         let errorContent = `Sorry, I encountered an error: ${data.error}`;
