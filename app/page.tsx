@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, BarChart3, Database, Users, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
+import AgentInteractionFlow from '../components/visualization/AgentInteractionFlow';
+import ChartVisualization from '../components/visualization/ChartVisualization';
+import DataTable from '../components/visualization/DataTable';
 
 interface ChatMessage {
   id: string;
@@ -70,6 +73,8 @@ export default function HomePage() {
   const [input, setInput] = useState('');
   const [selectedDataSource, setSelectedDataSource] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showAgentFlow, setShowAgentFlow] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef<boolean>(true);
 
@@ -102,6 +107,8 @@ export default function HomePage() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    setCurrentQuery(input.trim());
+    setShowAgentFlow(true);
 
 
     try {
@@ -153,6 +160,7 @@ export default function HomePage() {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
+        setShowAgentFlow(false);
       } else if (isMountedRef.current) {
         // Show detailed error information including missing env vars
         let errorContent = `Sorry, I encountered an error: ${data.error}`;
@@ -184,6 +192,7 @@ export default function HomePage() {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);
+        setShowAgentFlow(false);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -195,6 +204,7 @@ export default function HomePage() {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);
+        setShowAgentFlow(false);
       }
     } finally {
       if (isMountedRef.current) {
@@ -216,9 +226,9 @@ export default function HomePage() {
 
   const sampleQueries = [
     "What are the top 5 regions by revenue?",
+    "Which deals can help fill revenue gaps?",
     "Compare sales pipeline performance across regions",
     "Show me attendance trends by office",
-    "Which deals can help fill revenue gaps?",
     "Analyze correlation between attendance and sales performance"
   ];
 
@@ -340,14 +350,17 @@ export default function HomePage() {
                   <div className="whitespace-pre-wrap text-black" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{message.content}</div>
                   
                   {message.data && message.data.length > 0 && (
-                    <div className="mt-3 p-3 bg-gray-50 rounded border">
-                      <div className="text-sm font-medium text-gray-700 mb-2">
-                        Data Results ({message.data.length} rows)
-                      </div>
-                      <div className="text-xs text-gray-600 font-mono max-h-32 overflow-y-auto">
-                        {JSON.stringify(message.data.slice(0, 3), null, 2)}
-                        {message.data.length > 3 && <div>... and {message.data.length - 3} more rows</div>}
-                      </div>
+                    <div className="mt-4 space-y-4">
+                      <ChartVisualization 
+                        data={message.data} 
+                        title="Query Results"
+                        defaultChartType="bar"
+                      />
+                      <DataTable 
+                        data={message.data} 
+                        title="Data Results"
+                        pageSize={5}
+                      />
                     </div>
                   )}
 
@@ -369,7 +382,18 @@ export default function HomePage() {
             );
           })}
           
-          {isLoading && (
+          {isLoading && showAgentFlow && (
+            <div className="flex justify-start">
+              <div className="max-w-4xl w-full">
+                <AgentInteractionFlow 
+                  query={currentQuery} 
+                  onComplete={() => setShowAgentFlow(false)}
+                />
+              </div>
+            </div>
+          )}
+          
+          {isLoading && !showAgentFlow && (
             <div className="flex justify-start">
               <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center space-x-2">
