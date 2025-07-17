@@ -388,7 +388,7 @@ export default function HomePage() {
                   style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
                   
-                  {/* Progressive Multi-Agent Display */}
+                  {/* Show content or loading state */}
                   {message.content === 'LOADING_MULTI_AGENT' ? (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                       <div className="flex items-center gap-2 mb-4">
@@ -457,47 +457,47 @@ export default function HomePage() {
                       </div>
                     </div>
                   ) : (
-                    <>
-                      <div className="whitespace-pre-wrap text-black" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                        {message.content}
+                    <div className="whitespace-pre-wrap text-black" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                      {message.content}
+                    </div>
+                  )}
+                  
+                  {/* Multi-Agent Analysis for completed results only */}
+                  {message.content !== 'LOADING_MULTI_AGENT' && message.role === 'assistant' && showAgentFlow && (
+                    <div className="mt-4 bg-gray-50 rounded-lg p-4 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-700">Multi-Agent Analysis</span>
                       </div>
-                      
-                      {/* Static Multi-Agent Analysis for completed results */}
-                      <div className="mt-4 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span className="text-sm font-medium text-gray-700">Multi-Agent Analysis</span>
-                        </div>
 
-                        {/* Static Agents */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex flex-col items-center">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
-                              <Brain className="w-5 h-5 text-green-600" />
-                            </div>
-                            <span className="text-xs mt-1">Orchestrator</span>
+                      {/* Static Agents */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex flex-col items-center">
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
+                            <Brain className="w-5 h-5 text-green-600" />
                           </div>
-                          <div className="flex-1 h-px mx-3 bg-green-500"></div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
-                              <BarChart3 className="w-5 h-5 text-green-600" />
-                            </div>
-                            <span className="text-xs mt-1">Financial</span>
-                          </div>
-                          <div className="flex-1 h-px mx-3 bg-green-500"></div>
-                          <div className="flex flex-col items-center">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
-                              <Database className="w-5 h-5 text-green-600" />
-                            </div>
-                            <span className="text-xs mt-1">Pipeline</span>
-                          </div>
+                          <span className="text-xs mt-1">Orchestrator</span>
                         </div>
-
-                        <div className="text-center">
-                          <div className="text-xs text-gray-600">Analysis complete</div>
+                        <div className="flex-1 h-px mx-3 bg-green-500"></div>
+                        <div className="flex flex-col items-center">
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
+                            <BarChart3 className="w-5 h-5 text-green-600" />
+                          </div>
+                          <span className="text-xs mt-1">Financial</span>
+                        </div>
+                        <div className="flex-1 h-px mx-3 bg-green-500"></div>
+                        <div className="flex flex-col items-center">
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center border-2 bg-gray-50 border-gray-200">
+                            <Database className="w-5 h-5 text-green-600" />
+                          </div>
+                          <span className="text-xs mt-1">Pipeline</span>
                         </div>
                       </div>
-                    </>
+
+                      <div className="text-center">
+                        <div className="text-xs text-gray-600">Analysis complete</div>
+                      </div>
+                    </div>
                   )}
                   
                   
