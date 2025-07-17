@@ -255,7 +255,9 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
       return () => clearTimeout(timer);
     } else {
       setIsComplete(true);
-      // Don't call onComplete - keep the visualization up
+      if (onComplete) {
+        onComplete();
+      }
     }
   }, [currentStep, animationSteps, onComplete]);
 
@@ -272,11 +274,11 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     const fromPos = getAgentPosition(comm.from);
     const toPos = getAgentPosition(comm.to);
     
-    // Convert percentages to actual coordinates for the 400px height container
-    const x1 = (fromPos.x / 100) * 400;
-    const y1 = (fromPos.y / 100) * 400;
-    const x2 = (toPos.x / 100) * 400;
-    const y2 = (toPos.y / 100) * 400;
+    // Use viewBox coordinates (0-100)
+    const x1 = fromPos.x;
+    const y1 = fromPos.y;
+    const x2 = toPos.x;
+    const y2 = toPos.y;
     
     return (
       <g key={index}>
@@ -331,7 +333,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
       <div className={`relative bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-500 ${
         isComplete ? 'h-48' : 'h-96'
       }`}>
-        <svg className="absolute inset-0 w-full h-full">
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
           <defs>
             <style>
               {`

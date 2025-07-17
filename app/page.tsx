@@ -73,6 +73,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAgentFlow, setShowAgentFlow] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
+  const [pendingResponse, setPendingResponse] = useState<ChatMessage | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef<boolean>(true);
 
@@ -157,9 +158,8 @@ export default function HomePage() {
           insights: data.response?.insights || data.insights
         };
 
-        setMessages(prev => [...prev, assistantMessage]);
-        setShowAgentFlow(false);
-        setIsLoading(false);
+        // Store the response but don't show it yet - let the animation complete
+        setPendingResponse(assistantMessage);
       } else if (isMountedRef.current) {
         // Show detailed error information including missing env vars
         let errorContent = `Sorry, I encountered an error: ${data.error}`;
@@ -193,6 +193,7 @@ export default function HomePage() {
         setMessages(prev => [...prev, errorMessage]);
         setShowAgentFlow(false);
         setIsLoading(false);
+        setPendingResponse(null);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -206,6 +207,7 @@ export default function HomePage() {
         setMessages(prev => [...prev, errorMessage]);
         setShowAgentFlow(false);
         setIsLoading(false);
+        setPendingResponse(null);
       }
     } finally {
       if (isMountedRef.current) {
@@ -223,6 +225,16 @@ export default function HomePage() {
 
   const getAgentInfo = (agentId?: string) => {
     return dataSources.find(ds => ds.id === agentId);
+  };
+
+  const handleAgentFlowComplete = () => {
+    setShowAgentFlow(false);
+    setIsLoading(false);
+    
+    if (pendingResponse) {
+      setMessages(prev => [...prev, pendingResponse]);
+      setPendingResponse(null);
+    }
   };
 
   const sampleQueries = [
@@ -385,7 +397,7 @@ export default function HomePage() {
               <div className="max-w-4xl w-full">
                 <AgentInteractionFlow 
                   query={currentQuery} 
-                  onComplete={() => setShowAgentFlow(false)}
+                  onComplete={handleAgentFlowComplete}
                 />
               </div>
             </div>
