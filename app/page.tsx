@@ -212,6 +212,7 @@ export default function HomePage() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
+        setAgentFlowStep(0);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -226,6 +227,7 @@ export default function HomePage() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
+        setAgentFlowStep(0);
       }
     } finally {
       if (isMountedRef.current) {
@@ -246,13 +248,13 @@ export default function HomePage() {
   };
 
   const handleAgentFlowComplete = () => {
-    setShowAgentFlow(false);
-    setIsLoading(false);
-    
+    // Keep the agent flow visible - just show the response
     if (pendingResponse) {
       setMessages(prev => [...prev, pendingResponse]);
       setPendingResponse(null);
     }
+    setIsLoading(false);
+    // Don't hide showAgentFlow - keep it visible
   };
 
   const sampleQueries = [
@@ -410,7 +412,7 @@ export default function HomePage() {
             );
           })}
           
-          {isLoading && showAgentFlow && (
+          {showAgentFlow && (
             <div className="flex justify-start">
               <div className="max-w-lg w-full">
                 <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
@@ -476,7 +478,7 @@ export default function HomePage() {
                       {agentFlowStep === 1 && 'Financial Agent finding revenue gaps...'}
                       {agentFlowStep === 2 && 'Pipeline Agent searching deals...'}
                       {agentFlowStep === 3 && 'Orchestrator combining results...'}
-                      {agentFlowStep === 4 && 'Analysis complete'}
+                      {agentFlowStep >= 4 && 'Analysis complete'}
                     </div>
                   </div>
                 </div>
