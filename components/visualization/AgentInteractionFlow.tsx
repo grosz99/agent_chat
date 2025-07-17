@@ -52,6 +52,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
   const [communications, setCommunications] = useState<Communication[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState('Starting orchestration...');
 
   // Animation sequence for "Which deals can help fill revenue gaps?"
   const animationSteps = [

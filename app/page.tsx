@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, BarChart3, Database, Users, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
-import AgentInteractionFlow from '../components/visualization/AgentInteractionFlow';
+import SimpleAgentFlow from '../components/visualization/SimpleAgentFlow';
 
 interface ChatMessage {
   id: string;
@@ -395,7 +395,7 @@ export default function HomePage() {
           {isLoading && showAgentFlow && (
             <div className="flex justify-start">
               <div className="max-w-4xl w-full">
-                <AgentInteractionFlow 
+                <SimpleAgentFlow 
                   query={currentQuery} 
                   onComplete={handleAgentFlowComplete}
                 />
