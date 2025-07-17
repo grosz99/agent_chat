@@ -13,11 +13,11 @@ export default function CompactAgentFlow({ query, onComplete }: CompactAgentFlow
   const [isComplete, setIsComplete] = useState(false);
 
   const steps = [
-    { agent: 'orchestrator', message: 'Analyzing query...', duration: 2000 },
-    { agent: 'financial', message: 'Finding revenue gaps...', duration: 2000 },
-    { agent: 'pipeline', message: 'Searching deals...', duration: 2000 },
-    { agent: 'orchestrator', message: 'Combining results...', duration: 1500 },
-    { agent: 'complete', message: 'Analysis complete', duration: 500 }
+    { agent: 'orchestrator', message: 'Orchestrator analyzing query...', duration: 4000 },
+    { agent: 'financial', message: 'Financial Agent finding revenue gaps...', duration: 5000 },
+    { agent: 'pipeline', message: 'Pipeline Agent searching deals...', duration: 5000 },
+    { agent: 'orchestrator', message: 'Orchestrator combining results...', duration: 3000 },
+    { agent: 'complete', message: 'Analysis complete', duration: 2000 }
   ];
 
   useEffect(() => {
@@ -49,16 +49,20 @@ export default function CompactAgentFlow({ query, onComplete }: CompactAgentFlow
       <div className="flex items-center justify-between mb-4">
         {/* Orchestrator */}
         <div className={`flex flex-col items-center ${
-          currentStep.agent === 'orchestrator' ? 'opacity-100' : 'opacity-50'
-        } transition-opacity duration-300`}>
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 ${
+          currentStep.agent === 'orchestrator' ? 'opacity-100' : 'opacity-60'
+        } transition-all duration-500`}>
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 transition-all duration-500 ${
             currentStep.agent === 'orchestrator' 
-              ? 'bg-green-50 border-green-500 ring-2 ring-green-200' 
+              ? 'bg-green-100 border-green-500 ring-4 ring-green-300 shadow-lg shadow-green-200 animate-pulse' 
               : 'bg-gray-50 border-gray-200'
           }`}>
-            <Brain className="w-5 h-5 text-green-600" />
+            <Brain className={`w-5 h-5 transition-colors duration-300 ${
+              currentStep.agent === 'orchestrator' ? 'text-green-700' : 'text-gray-400'
+            }`} />
           </div>
-          <span className="text-xs text-gray-500 mt-1">Orchestrator</span>
+          <span className={`text-xs mt-1 transition-colors duration-300 ${
+            currentStep.agent === 'orchestrator' ? 'text-green-700 font-medium' : 'text-gray-400'
+          }`}>Orchestrator</span>
         </div>
 
         {/* Connection Line 1 */}
@@ -73,16 +77,20 @@ export default function CompactAgentFlow({ query, onComplete }: CompactAgentFlow
 
         {/* Financial Agent */}
         <div className={`flex flex-col items-center ${
-          currentStep.agent === 'financial' ? 'opacity-100' : 'opacity-50'
-        } transition-opacity duration-300`}>
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 ${
+          currentStep.agent === 'financial' ? 'opacity-100' : 'opacity-60'
+        } transition-all duration-500`}>
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 transition-all duration-500 ${
             currentStep.agent === 'financial' 
-              ? 'bg-green-50 border-green-500 ring-2 ring-green-200' 
+              ? 'bg-green-100 border-green-500 ring-4 ring-green-300 shadow-lg shadow-green-200 animate-pulse' 
               : 'bg-gray-50 border-gray-200'
           }`}>
-            <BarChart3 className="w-5 h-5 text-green-600" />
+            <BarChart3 className={`w-5 h-5 transition-colors duration-300 ${
+              currentStep.agent === 'financial' ? 'text-green-700' : 'text-gray-400'
+            }`} />
           </div>
-          <span className="text-xs text-gray-500 mt-1">Financial</span>
+          <span className={`text-xs mt-1 transition-colors duration-300 ${
+            currentStep.agent === 'financial' ? 'text-green-700 font-medium' : 'text-gray-400'
+          }`}>Financial</span>
         </div>
 
         {/* Connection Line 2 */}
@@ -97,16 +105,20 @@ export default function CompactAgentFlow({ query, onComplete }: CompactAgentFlow
 
         {/* Pipeline Agent */}
         <div className={`flex flex-col items-center ${
-          currentStep.agent === 'pipeline' ? 'opacity-100' : 'opacity-50'
-        } transition-opacity duration-300`}>
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 ${
+          currentStep.agent === 'pipeline' ? 'opacity-100' : 'opacity-60'
+        } transition-all duration-500`}>
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 transition-all duration-500 ${
             currentStep.agent === 'pipeline' 
-              ? 'bg-green-50 border-green-500 ring-2 ring-green-200' 
+              ? 'bg-green-100 border-green-500 ring-4 ring-green-300 shadow-lg shadow-green-200 animate-pulse' 
               : 'bg-gray-50 border-gray-200'
           }`}>
-            <Database className="w-5 h-5 text-green-600" />
+            <Database className={`w-5 h-5 transition-colors duration-300 ${
+              currentStep.agent === 'pipeline' ? 'text-green-700' : 'text-gray-400'
+            }`} />
           </div>
-          <span className="text-xs text-gray-500 mt-1">Pipeline</span>
+          <span className={`text-xs mt-1 transition-colors duration-300 ${
+            currentStep.agent === 'pipeline' ? 'text-green-700 font-medium' : 'text-gray-400'
+          }`}>Pipeline</span>
         </div>
       </div>
 
