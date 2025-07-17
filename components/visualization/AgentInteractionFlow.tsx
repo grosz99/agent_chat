@@ -58,7 +58,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     {
       agentUpdates: [{ id: 'orchestrator', status: 'thinking' as const }],
       communications: [],
-      delay: 2000 // Give orchestrator time to think
+      delay: 4000 // Give orchestrator time to think
     },
     {
       agentUpdates: [
@@ -71,7 +71,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         message: 'Analyze revenue gaps for Q4',
         status: 'active' as const
       }],
-      delay: 3000 // Show communication in action
+      delay: 5000 // Show communication in action
     },
     {
       agentUpdates: [{ id: 'financial', status: 'communicating' as const }],
@@ -81,7 +81,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         message: 'Analyze revenue gaps for Q4',
         status: 'complete' as const
       }],
-      delay: 2500 // Financial agent processing time
+      delay: 4000 // Financial agent processing time
     },
     {
       agentUpdates: [
@@ -102,7 +102,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           status: 'active' as const
         }
       ],
-      delay: 2000 // Orchestrator thinking about next step
+      delay: 4000 // Orchestrator thinking about next step
     },
     {
       agentUpdates: [
@@ -129,7 +129,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           status: 'active' as const
         }
       ],
-      delay: 3000 // Show pipeline agent working
+      delay: 5000 // Show pipeline agent working
     },
     {
       agentUpdates: [
@@ -155,7 +155,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           status: 'complete' as const
         }
       ],
-      delay: 2500 // Pipeline processing time
+      delay: 4000 // Pipeline processing time
     },
     {
       agentUpdates: [
@@ -188,7 +188,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           status: 'active' as const
         }
       ],
-      delay: 2000 // Final orchestrator analysis
+      delay: 4000 // Final orchestrator analysis
     },
     {
       agentUpdates: [
@@ -222,7 +222,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           status: 'complete' as const
         }
       ],
-      delay: 1000 // Brief pause before completion
+      delay: 3000 // Longer pause before completion
     }
   ];
 
@@ -247,10 +247,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
       return () => clearTimeout(timer);
     } else {
       setIsComplete(true);
-      if (onComplete) {
-        // Give time to see the complete state before moving to results
-        setTimeout(onComplete, 3000);
-      }
+      // Don't call onComplete - keep the visualization up
     }
   }, [currentStep, animationSteps, onComplete]);
 
@@ -267,33 +264,39 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     const fromPos = getAgentPosition(comm.from);
     const toPos = getAgentPosition(comm.to);
     
+    // Convert percentages to actual coordinates for the 400px height container
+    const x1 = (fromPos.x / 100) * 400;
+    const y1 = (fromPos.y / 100) * 400;
+    const x2 = (toPos.x / 100) * 400;
+    const y2 = (toPos.y / 100) * 400;
+    
     return (
       <g key={index}>
         <line
-          x1={`${fromPos.x}%`}
-          y1={`${fromPos.y}%`}
-          x2={`${toPos.x}%`}
-          y2={`${toPos.y}%`}
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
           stroke={comm.status === 'active' ? '#3B82F6' : '#9CA3AF'}
-          strokeWidth="2"
-          strokeDasharray={comm.status === 'active' ? '5,5' : 'none'}
+          strokeWidth="3"
+          strokeDasharray={comm.status === 'active' ? '8,4' : 'none'}
           className={comm.status === 'active' ? 'animate-dash' : ''}
         />
         {comm.status === 'active' && (
-          <circle r="4" fill="#3B82F6" className="animate-flow">
+          <circle r="6" fill="#3B82F6" className="animate-flow">
             <animateMotion
-              dur="2s"
+              dur="3s"
               repeatCount="indefinite"
-              path={`M${fromPos.x},${fromPos.y} L${toPos.x},${toPos.y}`}
+              path={`M${x1},${y1} L${x2},${y2}`}
             />
           </circle>
         )}
         <text
-          x={`${(fromPos.x + toPos.x) / 2}%`}
-          y={`${(fromPos.y + toPos.y) / 2}%`}
+          x={(x1 + x2) / 2}
+          y={(y1 + y2) / 2}
           textAnchor="middle"
-          className="text-xs fill-gray-600"
-          dy="-5"
+          className="text-xs fill-gray-700 font-medium"
+          dy="-8"
         >
           {comm.message}
         </text>
@@ -302,14 +305,24 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
   };
 
   return (
-    <div className="w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-6">
+    <div className={`w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 transition-all duration-500 ${
+      isComplete ? 'p-4' : 'p-6'
+    }`}>
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Multi-Agent Orchestration</h3>
-        <p className="text-sm text-gray-600">Analyzing: "Which deals can help fill revenue gaps?"</p>
-        <p className="text-xs text-gray-500 mt-1">Orchestrator coordinates Financial Agent and Pipeline Agent</p>
+        <h3 className={`font-semibold text-gray-900 mb-1 ${
+          isComplete ? 'text-base' : 'text-lg'
+        }`}>Multi-Agent Orchestration</h3>
+        <p className={`text-gray-600 ${
+          isComplete ? 'text-xs' : 'text-sm'
+        }`}>Analyzing: "Which deals can help fill revenue gaps?"</p>
+        {!isComplete && (
+          <p className="text-xs text-gray-500 mt-1">Orchestrator coordinates Financial Agent and Pipeline Agent</p>
+        )}
       </div>
 
-      <div className="relative h-96 bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className={`relative bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-500 ${
+        isComplete ? 'h-48' : 'h-96'
+      }`}>
         <svg className="absolute inset-0 w-full h-full">
           <defs>
             <style>

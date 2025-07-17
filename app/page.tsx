@@ -158,7 +158,8 @@ export default function HomePage() {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
-        setShowAgentFlow(false);
+        // Keep agent flow visible but mark as complete
+        setIsLoading(false);
       } else if (isMountedRef.current) {
         // Show detailed error information including missing env vars
         let errorContent = `Sorry, I encountered an error: ${data.error}`;
@@ -191,6 +192,7 @@ export default function HomePage() {
         };
         setMessages(prev => [...prev, errorMessage]);
         setShowAgentFlow(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -203,6 +205,7 @@ export default function HomePage() {
         };
         setMessages(prev => [...prev, errorMessage]);
         setShowAgentFlow(false);
+        setIsLoading(false);
       }
     } finally {
       if (isMountedRef.current) {
@@ -377,7 +380,7 @@ export default function HomePage() {
             );
           })}
           
-          {isLoading && showAgentFlow && (
+          {showAgentFlow && (
             <div className="flex justify-start">
               <div className="max-w-4xl w-full">
                 <AgentInteractionFlow 
