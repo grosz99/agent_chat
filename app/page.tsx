@@ -158,7 +158,7 @@ export default function HomePage() {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
-        // Keep agent flow visible but mark as complete
+        setShowAgentFlow(false);
         setIsLoading(false);
       } else if (isMountedRef.current) {
         // Show detailed error information including missing env vars
@@ -380,7 +380,7 @@ export default function HomePage() {
             );
           })}
           
-          {showAgentFlow && (
+          {isLoading && showAgentFlow && (
             <div className="flex justify-start">
               <div className="max-w-4xl w-full">
                 <AgentInteractionFlow 

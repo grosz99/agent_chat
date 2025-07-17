@@ -28,21 +28,21 @@ const agents: Agent[] = [
     id: 'orchestrator',
     name: 'Orchestrator',
     icon: Brain,
-    color: 'bg-purple-500',
+    color: 'bg-green-600',
     status: 'idle'
   },
   {
     id: 'financial',
     name: 'Financial Agent',
     icon: BarChart3,
-    color: 'bg-blue-500',
+    color: 'bg-green-500',
     status: 'idle'
   },
   {
     id: 'pipeline',
     name: 'Pipeline Agent',
     icon: Database,
-    color: 'bg-green-500',
+    color: 'bg-green-400',
     status: 'idle'
   }
 ];
@@ -226,6 +226,14 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     }
   ];
 
+  // Reset animation when component mounts or query changes
+  useEffect(() => {
+    setAgentStates(agents);
+    setCommunications([]);
+    setCurrentStep(0);
+    setIsComplete(false);
+  }, [query]);
+
   useEffect(() => {
     if (currentStep < animationSteps.length) {
       const step = animationSteps[currentStep];
@@ -277,13 +285,13 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
           y1={y1}
           x2={x2}
           y2={y2}
-          stroke={comm.status === 'active' ? '#3B82F6' : '#9CA3AF'}
+          stroke={comm.status === 'active' ? '#059669' : '#6B7280'}
           strokeWidth="3"
           strokeDasharray={comm.status === 'active' ? '8,4' : 'none'}
           className={comm.status === 'active' ? 'animate-dash' : ''}
         />
         {comm.status === 'active' && (
-          <circle r="6" fill="#3B82F6" className="animate-flow">
+          <circle r="6" fill="#059669" className="animate-flow">
             <animateMotion
               dur="3s"
               repeatCount="indefinite"
@@ -356,9 +364,9 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
             >
               <div className={`
                 relative p-4 bg-white rounded-lg border-2 shadow-lg
-                ${agent.status === 'thinking' ? 'border-yellow-400 animate-pulse' : ''}
-                ${agent.status === 'communicating' ? 'border-blue-400' : ''}
-                ${agent.status === 'complete' ? 'border-green-400' : ''}
+                ${agent.status === 'thinking' ? 'border-green-300 animate-pulse' : ''}
+                ${agent.status === 'communicating' ? 'border-green-500' : ''}
+                ${agent.status === 'complete' ? 'border-green-600' : ''}
                 ${agent.status === 'idle' ? 'border-gray-300' : ''}
               `}>
                 <div className={`${agent.color} p-2 rounded-lg text-white mb-2`}>
@@ -369,13 +377,13 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
                 
                 {agent.status === 'thinking' && (
                   <div className="absolute -top-2 -right-2">
-                    <Sparkles className="w-4 h-4 text-yellow-500 animate-spin" />
+                    <Sparkles className="w-4 h-4 text-green-500 animate-spin" />
                   </div>
                 )}
                 
                 {agent.status === 'communicating' && (
                   <div className="absolute -top-2 -right-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                   </div>
                 )}
               </div>
@@ -386,7 +394,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         {/* Status indicator */}
         <div className="absolute bottom-4 left-4">
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm
-            ${isComplete ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}
+            ${isComplete ? 'bg-green-100 text-green-700' : 'bg-green-100 text-green-700'}
           `}>
             {isComplete ? (
               <>
@@ -395,7 +403,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
               </>
             ) : (
               <>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 Orchestrating... Step {currentStep + 1} of {animationSteps.length}
               </>
             )}
@@ -406,15 +414,15 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
       {/* Legend */}
       <div className="mt-4 flex gap-4 text-xs text-gray-600">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 border-2 border-yellow-400 rounded" />
+          <div className="w-3 h-3 border-2 border-green-300 rounded" />
           <span>Thinking</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 border-2 border-blue-400 rounded" />
+          <div className="w-3 h-3 border-2 border-green-500 rounded" />
           <span>Communicating</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 border-2 border-green-400 rounded" />
+          <div className="w-3 h-3 border-2 border-green-600 rounded" />
           <span>Complete</span>
         </div>
       </div>
