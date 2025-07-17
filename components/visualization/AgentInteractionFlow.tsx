@@ -44,13 +44,6 @@ const agents: Agent[] = [
     icon: Database,
     color: 'bg-green-500',
     status: 'idle'
-  },
-  {
-    id: 'hr',
-    name: 'HR Agent',
-    icon: Users,
-    color: 'bg-orange-500',
-    status: 'idle'
   }
 ];
 
@@ -263,10 +256,9 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
 
   const getAgentPosition = (agentId: string) => {
     const positions: Record<string, { x: number; y: number }> = {
-      orchestrator: { x: 50, y: 20 },
-      financial: { x: 20, y: 70 },
-      pipeline: { x: 80, y: 70 },
-      hr: { x: 50, y: 120 }
+      orchestrator: { x: 50, y: 25 },
+      financial: { x: 25, y: 75 },
+      pipeline: { x: 75, y: 75 }
     };
     return positions[agentId] || { x: 50, y: 50 };
   };
@@ -312,8 +304,9 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
   return (
     <div className="w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200 p-6">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Agent Collaboration Network</h3>
-        <p className="text-sm text-gray-600">Query: "{query}"</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Multi-Agent Orchestration</h3>
+        <p className="text-sm text-gray-600">Analyzing: "Which deals can help fill revenue gaps?"</p>
+        <p className="text-xs text-gray-500 mt-1">Orchestrator coordinates Financial Agent and Pipeline Agent</p>
       </div>
 
       <div className="relative h-96 bg-white rounded-lg border border-gray-200 overflow-hidden">

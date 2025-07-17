@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, BarChart3, Database, Users, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 import AgentInteractionFlow from '../components/visualization/AgentInteractionFlow';
-import ChartVisualization from '../components/visualization/ChartVisualization';
-import DataTable from '../components/visualization/DataTable';
 
 interface ChatMessage {
   id: string;
@@ -350,17 +348,14 @@ export default function HomePage() {
                   <div className="whitespace-pre-wrap text-black" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>{message.content}</div>
                   
                   {message.data && message.data.length > 0 && (
-                    <div className="mt-4 space-y-4">
-                      <ChartVisualization 
-                        data={message.data} 
-                        title="Query Results"
-                        defaultChartType="bar"
-                      />
-                      <DataTable 
-                        data={message.data} 
-                        title="Data Results"
-                        pageSize={5}
-                      />
+                    <div className="mt-3 p-3 bg-gray-50 rounded border">
+                      <div className="text-sm font-medium text-gray-700 mb-2">
+                        Data Results ({message.data.length} rows)
+                      </div>
+                      <div className="text-xs text-gray-600 font-mono max-h-32 overflow-y-auto">
+                        {JSON.stringify(message.data.slice(0, 3), null, 2)}
+                        {message.data.length > 3 && <div>... and {message.data.length - 3} more rows</div>}
+                      </div>
                     </div>
                   )}
 
