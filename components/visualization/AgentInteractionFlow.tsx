@@ -65,7 +65,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     {
       agentUpdates: [{ id: 'orchestrator', status: 'thinking' as const }],
       communications: [],
-      delay: 500
+      delay: 2000 // Give orchestrator time to think
     },
     {
       agentUpdates: [
@@ -75,20 +75,41 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
       communications: [{
         from: 'orchestrator',
         to: 'financial',
-        message: 'Analyze revenue gaps',
+        message: 'Analyze revenue gaps for Q4',
         status: 'active' as const
       }],
-      delay: 1500
+      delay: 3000 // Show communication in action
     },
     {
       agentUpdates: [{ id: 'financial', status: 'communicating' as const }],
       communications: [{
         from: 'orchestrator',
         to: 'financial',
-        message: 'Analyze revenue gaps',
+        message: 'Analyze revenue gaps for Q4',
         status: 'complete' as const
       }],
-      delay: 2000
+      delay: 2500 // Financial agent processing time
+    },
+    {
+      agentUpdates: [
+        { id: 'orchestrator', status: 'thinking' as const },
+        { id: 'financial', status: 'complete' as const }
+      ],
+      communications: [
+        {
+          from: 'orchestrator',
+          to: 'financial',
+          message: 'Analyze revenue gaps for Q4',
+          status: 'complete' as const
+        },
+        {
+          from: 'financial',
+          to: 'orchestrator',
+          message: 'Gap: $2.5M in Q4 revenue',
+          status: 'active' as const
+        }
+      ],
+      delay: 2000 // Orchestrator thinking about next step
     },
     {
       agentUpdates: [
@@ -99,17 +120,23 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         {
           from: 'orchestrator',
           to: 'financial',
-          message: 'Analyze revenue gaps',
+          message: 'Analyze revenue gaps for Q4',
           status: 'complete' as const
         },
         {
           from: 'financial',
           to: 'orchestrator',
-          message: '$2.5M gap in Q4',
+          message: 'Gap: $2.5M in Q4 revenue',
+          status: 'complete' as const
+        },
+        {
+          from: 'orchestrator',
+          to: 'pipeline',
+          message: 'Find deals ≥$2.5M closing Q4',
           status: 'active' as const
         }
       ],
-      delay: 1500
+      delay: 3000 // Show pipeline agent working
     },
     {
       agentUpdates: [
@@ -119,57 +146,56 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         {
           from: 'orchestrator',
           to: 'financial',
-          message: 'Analyze revenue gaps',
+          message: 'Analyze revenue gaps for Q4',
           status: 'complete' as const
         },
         {
           from: 'financial',
           to: 'orchestrator',
-          message: '$2.5M gap in Q4',
+          message: 'Gap: $2.5M in Q4 revenue',
           status: 'complete' as const
         },
         {
           from: 'orchestrator',
           to: 'pipeline',
-          message: 'Find deals worth $2.5M+',
-          status: 'active' as const
+          message: 'Find deals ≥$2.5M closing Q4',
+          status: 'complete' as const
         }
       ],
-      delay: 2000
+      delay: 2500 // Pipeline processing time
     },
     {
       agentUpdates: [
         { id: 'orchestrator', status: 'thinking' as const },
-        { id: 'financial', status: 'complete' as const },
         { id: 'pipeline', status: 'complete' as const }
       ],
       communications: [
         {
           from: 'orchestrator',
           to: 'financial',
-          message: 'Analyze revenue gaps',
+          message: 'Analyze revenue gaps for Q4',
           status: 'complete' as const
         },
         {
           from: 'financial',
           to: 'orchestrator',
-          message: '$2.5M gap in Q4',
+          message: 'Gap: $2.5M in Q4 revenue',
           status: 'complete' as const
         },
         {
           from: 'orchestrator',
           to: 'pipeline',
-          message: 'Find deals worth $2.5M+',
+          message: 'Find deals ≥$2.5M closing Q4',
           status: 'complete' as const
         },
         {
           from: 'pipeline',
           to: 'orchestrator',
-          message: '5 deals identified',
+          message: 'Found 5 qualifying deals',
           status: 'active' as const
         }
       ],
-      delay: 1000
+      delay: 2000 // Final orchestrator analysis
     },
     {
       agentUpdates: [
@@ -181,29 +207,29 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
         {
           from: 'orchestrator',
           to: 'financial',
-          message: 'Analyze revenue gaps',
+          message: 'Analyze revenue gaps for Q4',
           status: 'complete' as const
         },
         {
           from: 'financial',
           to: 'orchestrator',
-          message: '$2.5M gap in Q4',
+          message: 'Gap: $2.5M in Q4 revenue',
           status: 'complete' as const
         },
         {
           from: 'orchestrator',
           to: 'pipeline',
-          message: 'Find deals worth $2.5M+',
+          message: 'Find deals ≥$2.5M closing Q4',
           status: 'complete' as const
         },
         {
           from: 'pipeline',
           to: 'orchestrator',
-          message: '5 deals identified',
+          message: 'Found 5 qualifying deals',
           status: 'complete' as const
         }
       ],
-      delay: 500
+      delay: 1000 // Brief pause before completion
     }
   ];
 
@@ -229,7 +255,8 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
     } else {
       setIsComplete(true);
       if (onComplete) {
-        setTimeout(onComplete, 500);
+        // Give time to see the complete state before moving to results
+        setTimeout(onComplete, 3000);
       }
     }
   }, [currentStep, animationSteps, onComplete]);
@@ -339,6 +366,12 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
                     <Sparkles className="w-4 h-4 text-yellow-500 animate-spin" />
                   </div>
                 )}
+                
+                {agent.status === 'communicating' && (
+                  <div className="absolute -top-2 -right-2">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -357,7 +390,7 @@ export default function AgentInteractionFlow({ query, onComplete }: AgentInterac
             ) : (
               <>
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                Analyzing...
+                Orchestrating... Step {currentStep + 1} of {animationSteps.length}
               </>
             )}
           </div>
