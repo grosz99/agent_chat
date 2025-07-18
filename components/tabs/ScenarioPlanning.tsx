@@ -65,7 +65,6 @@ export function ScenarioPlanning() {
   const [selectedDataSource, setSelectedDataSource] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [showAgentFlow, setShowAgentFlow] = useState(false);
-  const [agentFlowStep, setAgentFlowStep] = useState(0);
   const [pendingResponse, setPendingResponse] = useState<{message: string, data?: any, insights?: string[], agentId?: string} | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
@@ -113,47 +112,17 @@ export function ScenarioPlanning() {
       const data = await response.json();
 
       if (response.ok && data.success && isMountedRef.current) {
-        setShowAgentFlow(true);
-        setAgentFlowStep(1);
-        setPendingResponse({
+        // Store the response data
+        const responseData = {
           message: data.response.content,
           data: data.response.data,
           insights: data.response.insights,
           agentId: data.agent.id
-        });
-
-        setTimeout(() => {
-          if (isMountedRef.current) {
-            setAgentFlowStep(2);
-            
-            setTimeout(() => {
-              if (!isMountedRef.current) return;
-              
-              const assistantMessage: ChatMessage = {
-                id: (Date.now() + 1).toString(),
-                role: 'assistant',
-                content: pendingResponse?.message || '',
-                timestamp: new Date(),
-                agentId: pendingResponse?.agentId,
-                data: pendingResponse?.data,
-                chart: undefined,
-                insights: pendingResponse?.insights
-              };
-              
-              setMessages(prev => [...prev, assistantMessage]);
-              setAgentFlowStep(3);
-              
-              setTimeout(() => {
-                if (isMountedRef.current) {
-                  setShowAgentFlow(false);
-                  setAgentFlowStep(0);
-                  setIsLoading(false);
-                  setPendingResponse(null);
-                }
-              }, 500);
-            }, 1500);
-          }
-        }, minDemoTime);
+        };
+        setPendingResponse(responseData);
+        
+        // Show agent flow animation
+        setShowAgentFlow(true);
       } else if (isMountedRef.current) {
         console.error('API Error Response:', data);
         let errorContent = `Sorry, I encountered an error`;
@@ -180,7 +149,6 @@ export function ScenarioPlanning() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
-        setAgentFlowStep(0);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -195,7 +163,6 @@ export function ScenarioPlanning() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
-        setAgentFlowStep(0);
       }
     }
   };
@@ -293,8 +260,24 @@ export function ScenarioPlanning() {
               <CompactAgentFlow 
                 query={inputMessage}
                 onComplete={() => {
-                  setShowAgentFlow(false);
-                  setAgentFlowStep(0);
+                  // When animation completes, add the message and clean up
+                  if (pendingResponse && isMountedRef.current) {
+                    const assistantMessage: ChatMessage = {
+                      id: (Date.now() + 1).toString(),
+                      role: 'assistant',
+                      content: pendingResponse.message,
+                      timestamp: new Date(),
+                      agentId: pendingResponse.agentId,
+                      data: pendingResponse.data,
+                      chart: undefined,
+                      insights: pendingResponse.insights
+                    };
+                    
+                    setMessages(prev => [...prev, assistantMessage]);
+                    setShowAgentFlow(false);
+                    setIsLoading(false);
+                    setPendingResponse(null);
+                  }
                 }}
               />
             </div>
