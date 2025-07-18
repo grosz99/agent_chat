@@ -1,11 +1,81 @@
 import { NextRequest, NextResponse } from 'next/server';
 import snowflake from 'snowflake-sdk';
 
+// Mock data fallback function
+function getMockData(userQuery: string, agentId: string) {
+  let data: any[] = [];
+  let agentName = '';
+  let insights: string[] = [];
+
+  if (userQuery.toLowerCase().includes('revenue') || userQuery.toLowerCase().includes('financial') || agentId === 'ncc-financial') {
+    agentName = 'Financial Data Agent';
+    data = [
+      { region: 'North America', revenue: 1500000, period: 'Q4 2024' },
+      { region: 'Europe', revenue: 1200000, period: 'Q4 2024' },
+      { region: 'Asia Pacific', revenue: 900000, period: 'Q4 2024' },
+      { region: 'Latin America', revenue: 400000, period: 'Q4 2024' },
+      { region: 'Middle East', revenue: 300000, period: 'Q4 2024' }
+    ];
+    insights = [
+      'North America leads revenue generation with $1.5M',
+      'Europe shows strong performance at $1.2M',
+      'Total Q4 revenue across all regions: $4.3M'
+    ];
+  } else if (userQuery.toLowerCase().includes('attendance') || userQuery.toLowerCase().includes('office') || agentId === 'attendance-analytics') {
+    agentName = 'HR Analytics Agent';
+    data = [
+      { office: 'Tokyo', attendance_rate: 91.3, month: '2024-12' },
+      { office: 'London', attendance_rate: 88.1, month: '2024-12' },
+      { office: 'New York', attendance_rate: 85.2, month: '2024-12' },
+      { office: 'San Francisco', attendance_rate: 82.7, month: '2024-12' },
+      { office: 'Sydney', attendance_rate: 79.8, month: '2024-12' }
+    ];
+    insights = [
+      'Tokyo office has highest attendance at 91.3%',
+      'Sydney office needs attention with 79.8% attendance',
+      'Average attendance across all offices: 85.4%'
+    ];
+  } else if (userQuery.toLowerCase().includes('sales') || userQuery.toLowerCase().includes('pipeline') || agentId === 'pipeline-analytics') {
+    agentName = 'Sales Pipeline Agent';
+    data = [
+      { deal_type: 'Strategic', pipeline_value: 3200000, deal_count: 5, confidence: 'Medium' },
+      { deal_type: 'Enterprise', pipeline_value: 2500000, deal_count: 12, confidence: 'High' },
+      { deal_type: 'Mid-Market', pipeline_value: 1800000, deal_count: 28, confidence: 'Medium' },
+      { deal_type: 'SMB', pipeline_value: 950000, deal_count: 45, confidence: 'High' }
+    ];
+    insights = [
+      'Strategic deals represent highest value per deal',
+      'SMB segment has most deals with highest confidence',
+      'Total pipeline value: $8.45M across 90 deals'
+    ];
+  } else {
+    agentName = 'Financial Data Agent';
+    data = [{ timestamp: new Date().toISOString(), message: 'Welcome to BeaconAgent!' }];
+    insights = ['Demo system ready for queries'];
+  }
+
+  return {
+    result: {
+      message: `Based on your query "${userQuery}", I've analyzed the ${agentName.toLowerCase()} and found the following results:`,
+      data: data,
+      agentId: agentId,
+      insights,
+      chart: null
+    }
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { query: userQuery, agentId } = await request.json();
     
     console.log('Snowflake query request:', { userQuery, agentId });
+    
+    // Check if Snowflake is properly configured
+    if (!process.env.SNOWFLAKE_USER || !process.env.SNOWFLAKE_ACCOUNT) {
+      console.log('Snowflake not properly configured, using mock data');
+      return NextResponse.json(getMockData(userQuery, agentId));
+    }
     
     // Simple query mapping based on user input
     let sqlQuery: string;
