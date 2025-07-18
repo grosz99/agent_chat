@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, Target, Users, Send } from 'lucide-react';
+import { DollarSign, TrendingUp, Target, Users, Send, BarChart3 } from 'lucide-react';
 import { KPICard } from '@/components/dashboard/KPICard';
 import { RevenueTrendChart } from '@/components/dashboard/RevenueTrendChart';
 
@@ -145,7 +145,7 @@ export function Dashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="e.g., What drove the revenue increase last quarter?"
+              placeholder="What drove revenue to increase from March to April?"
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
               disabled={searchLoading}
             />
@@ -163,8 +163,32 @@ export function Dashboard() {
             </button>
           </div>
           
+          {searchLoading && (
+            <div className="bg-gray-50 rounded-lg p-4 border-l-4 border-[var(--primary-color)]">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[var(--primary-color)] text-white">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-700">Financial Agent</p>
+                  <p className="text-xs text-gray-500">Analyzing revenue data...</p>
+                </div>
+                <div className="w-4 h-4 border-2 border-[var(--primary-color)] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            </div>
+          )}
+          
           {searchResult && (
             <div className="bg-gray-50 rounded-lg p-4 border-l-4 border-[var(--primary-color)]">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-[var(--primary-color)] text-white">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Financial Agent</p>
+                  <p className="text-xs text-gray-500">Analysis complete</p>
+                </div>
+              </div>
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{searchResult}</p>
             </div>
           )}
