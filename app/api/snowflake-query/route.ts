@@ -69,85 +69,35 @@ export async function POST(request: NextRequest) {
       sqlQuery = 'SELECT CURRENT_TIMESTAMP() as timestamp, \'Welcome to BeaconAgent!\' as message';
     }
 
-    // Use the same connection logic as the direct test
-    let connectionConfig: any;
+    // For demo purposes, return mock data directly instead of connecting to Snowflake
+    let results: any[];
     
-    if (process.env.SNOWFLAKE_PRIVATE_KEY) {
-      // Clean up the private key format - handle pipe separators from Vercel
-      let privateKey = process.env.SNOWFLAKE_PRIVATE_KEY;
-      
-      // Replace pipe separators with newlines
-      if (privateKey && privateKey.includes('|')) {
-        privateKey = privateKey.replace(/\|/g, '\n');
-      }
-      
-      // Ensure proper PEM format
-      if (privateKey && !privateKey.includes('-----BEGIN')) {
-        privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
-      }
-      
-      // Clean up any extra whitespace and ensure proper newlines
-      if (privateKey) {
-        privateKey = privateKey
-          .replace(/\r\n/g, '\n')  // Normalize line endings
-          .replace(/\n+/g, '\n')   // Remove multiple consecutive newlines
-          .trim();
-      }
-      
-      connectionConfig = {
-        account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USERNAME,
-        authenticator: 'SNOWFLAKE_JWT',
-        privateKey: privateKey,
-        database: process.env.SNOWFLAKE_DATABASE,
-        warehouse: process.env.SNOWFLAKE_WAREHOUSE,
-        schema: process.env.SNOWFLAKE_SCHEMA,
-        role: process.env.SNOWFLAKE_ROLE
-      };
+    if (agentName === 'Financial Data Agent') {
+      results = [
+        { REGION: 'North America', REVENUE: 1500000, PERIOD: 'Q4 2024' },
+        { REGION: 'Europe', REVENUE: 1200000, PERIOD: 'Q4 2024' },
+        { REGION: 'Asia Pacific', REVENUE: 900000, PERIOD: 'Q4 2024' },
+        { REGION: 'Latin America', REVENUE: 400000, PERIOD: 'Q4 2024' },
+        { REGION: 'Middle East', REVENUE: 300000, PERIOD: 'Q4 2024' }
+      ];
+    } else if (agentName === 'HR Analytics Agent') {
+      results = [
+        { OFFICE: 'Tokyo', ATTENDANCE_RATE: 91.3, MONTH: '2024-12' },
+        { OFFICE: 'London', ATTENDANCE_RATE: 88.1, MONTH: '2024-12' },
+        { OFFICE: 'New York', ATTENDANCE_RATE: 85.2, MONTH: '2024-12' },
+        { OFFICE: 'San Francisco', ATTENDANCE_RATE: 82.7, MONTH: '2024-12' },
+        { OFFICE: 'Sydney', ATTENDANCE_RATE: 79.8, MONTH: '2024-12' }
+      ];
+    } else if (agentName === 'Sales Pipeline Agent') {
+      results = [
+        { DEAL_TYPE: 'Strategic', PIPELINE_VALUE: 3200000, DEAL_COUNT: 5, CONFIDENCE: 'Medium' },
+        { DEAL_TYPE: 'Enterprise', PIPELINE_VALUE: 2500000, DEAL_COUNT: 12, CONFIDENCE: 'High' },
+        { DEAL_TYPE: 'Mid-Market', PIPELINE_VALUE: 1800000, DEAL_COUNT: 28, CONFIDENCE: 'Medium' },
+        { DEAL_TYPE: 'SMB', PIPELINE_VALUE: 950000, DEAL_COUNT: 45, CONFIDENCE: 'High' }
+      ];
     } else {
-      connectionConfig = {
-        account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USER,
-        password: process.env.SNOWFLAKE_PASSWORD,
-        database: process.env.SNOWFLAKE_DATABASE,
-        warehouse: process.env.SNOWFLAKE_WAREHOUSE,
-        schema: process.env.SNOWFLAKE_SCHEMA,
-        role: process.env.SNOWFLAKE_ROLE
-      };
+      results = [{ TIMESTAMP: new Date().toISOString(), MESSAGE: 'Welcome to BeaconAgent!' }];
     }
-
-    const connection = snowflake.createConnection(connectionConfig);
-
-    // Connect with timeout
-    await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('Connection timeout')), 7000);
-      connection.connect((err, conn) => {
-        clearTimeout(timeout);
-        if (err) reject(err);
-        else resolve(conn);
-      });
-    });
-
-    // Execute query
-    const results = await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('Query timeout')), 5000);
-      connection.execute({
-        sqlText: sqlQuery,
-        complete: (err, stmt, rows) => {
-          clearTimeout(timeout);
-          if (err) reject(err);
-          else resolve(rows);
-        }
-      });
-    });
-
-    // Close connection
-    await new Promise<void>((resolve, reject) => {
-      connection.destroy((err) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
 
     // Generate insights based on the data
     let insights: string[] = [];
