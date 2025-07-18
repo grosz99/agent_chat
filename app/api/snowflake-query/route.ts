@@ -71,9 +71,11 @@ export async function POST(request: NextRequest) {
     
     console.log('Snowflake query request:', { userQuery, agentId });
     
-    // Always use mock data for demo - Snowflake config issues
-    console.log('Using mock data for demo');
-    return NextResponse.json(getMockData(userQuery, agentId));
+    // Check if Snowflake is properly configured
+    if (!process.env.SNOWFLAKE_USER || !process.env.SNOWFLAKE_ACCOUNT) {
+      console.log('Snowflake not properly configured, using mock data');
+      return NextResponse.json(getMockData(userQuery, agentId));
+    }
     
     // Simple query mapping based on user input
     let sqlQuery: string;
@@ -143,20 +145,22 @@ export async function POST(request: NextRequest) {
       let privateKey = process.env.SNOWFLAKE_PRIVATE_KEY;
       
       // Replace pipe separators with newlines
-      if (privateKey.includes('|')) {
+      if (privateKey && privateKey.includes('|')) {
         privateKey = privateKey.replace(/\|/g, '\n');
       }
       
       // Ensure proper PEM format
-      if (!privateKey.includes('-----BEGIN')) {
+      if (privateKey && !privateKey.includes('-----BEGIN')) {
         privateKey = `-----BEGIN PRIVATE KEY-----\n${privateKey}\n-----END PRIVATE KEY-----`;
       }
       
       // Clean up any extra whitespace and ensure proper newlines
-      privateKey = privateKey
-        .replace(/\r\n/g, '\n')  // Normalize line endings
-        .replace(/\n+/g, '\n')   // Remove multiple consecutive newlines
-        .trim();
+      if (privateKey) {
+        privateKey = privateKey
+          .replace(/\r\n/g, '\n')  // Normalize line endings
+          .replace(/\n+/g, '\n')   // Remove multiple consecutive newlines
+          .trim();
+      }
       
       connectionConfig = {
         account: process.env.SNOWFLAKE_ACCOUNT,
