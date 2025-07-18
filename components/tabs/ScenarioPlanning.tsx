@@ -66,7 +66,7 @@ export function ScenarioPlanning() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAgentFlow, setShowAgentFlow] = useState(false);
   const [agentFlowStep, setAgentFlowStep] = useState(0);
-  const [pendingResponse, setPendingResponse] = useState<{message: string, data?: any} | null>(null);
+  const [pendingResponse, setPendingResponse] = useState<{message: string, data?: any, insights?: string[], agentId?: string} | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
   const minDemoTime = 3000;
@@ -99,7 +99,7 @@ export function ScenarioPlanning() {
 
     try {
       // This will be the same logic from the original page.tsx
-      const response = await fetch('/api/test-simple', {
+      const response = await fetch('/api/snowflake-query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -112,10 +112,15 @@ export function ScenarioPlanning() {
 
       const data = await response.json();
 
-      if (response.ok && data.result && isMountedRef.current) {
+      if (response.ok && data.success && isMountedRef.current) {
         setShowAgentFlow(true);
         setAgentFlowStep(1);
-        setPendingResponse(data.result);
+        setPendingResponse({
+          message: data.response.content,
+          data: data.response.data,
+          insights: data.response.insights,
+          agentId: data.agent.id
+        });
 
         setTimeout(() => {
           if (isMountedRef.current) {
@@ -127,12 +132,12 @@ export function ScenarioPlanning() {
               const assistantMessage: ChatMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: data.result.message,
+                content: pendingResponse?.message || '',
                 timestamp: new Date(),
-                agentId: data.result.agentId,
-                data: data.result.data,
-                chart: data.result.chart,
-                insights: data.result.insights
+                agentId: pendingResponse?.agentId,
+                data: pendingResponse?.data,
+                chart: undefined,
+                insights: pendingResponse?.insights
               };
               
               setMessages(prev => [...prev, assistantMessage]);
