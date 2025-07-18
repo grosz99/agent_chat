@@ -11,7 +11,7 @@ import { Plugin } from '@/components/tabs/Plugin';
 const tabs = [
   {
     id: 'scenario-planning',
-    label: 'Scenario Planning',
+    label: 'Beacon',
     icon: <Database className="w-4 h-4" />
   },
   {

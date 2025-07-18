@@ -195,7 +195,7 @@ export function ScenarioPlanning() {
       {/* Sidebar - Data Sources */}
       <div className="w-80 bg-white border-r flex flex-col shadow-lg" style={{ borderColor: 'var(--border-light)' }}>
         <div className="p-6 border-b" style={{ borderColor: 'var(--border-light)', background: 'var(--background)' }}>
-          <h3 className="text-lg font-semibold mb-2">Scenario Planning With Surge</h3>
+          <h3 className="text-lg font-semibold mb-2">Beacon</h3>
           <p className="text-sm text-gray-600">Multi-agent orchestration for complex queries</p>
         </div>
 
@@ -290,13 +290,13 @@ export function ScenarioPlanning() {
           {messages.length === 0 ? (
             <div className="text-center py-20">
               <Image 
-                src="/surge-logo.svg" 
-                alt="Surge Logo" 
+                src="/logo.svg" 
+                alt="Beacon Logo" 
                 width={64} 
                 height={64}
                 className="mx-auto mb-4"
               />
-              <h2 className="text-2xl font-semibold mb-2">Welcome to Surge</h2>
+              <h2 className="text-2xl font-semibold mb-2">Welcome to Beacon</h2>
               <p className="text-gray-600 max-w-md mx-auto">
                 I can help you analyze data across multiple sources. Select a data source or ask a complex question to get started.
               </p>

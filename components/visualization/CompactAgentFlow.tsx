@@ -42,7 +42,7 @@ export default function CompactAgentFlow({ query, onComplete }: CompactAgentFlow
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span className="text-sm font-medium text-gray-700">Multi-Agent Analysis</span>
+        <span className="text-sm font-medium text-gray-700">Powered by Surge</span>
       </div>
 
       {/* Workflow */}
