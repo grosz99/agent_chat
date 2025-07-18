@@ -289,7 +289,13 @@ export function ScenarioPlanning() {
           
           {messages.length === 0 ? (
             <div className="text-center py-20">
-              <Brain className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--primary-light)' }} />
+              <Image 
+                src="/surge-logo.svg" 
+                alt="Surge Logo" 
+                width={64} 
+                height={64}
+                className="mx-auto mb-4"
+              />
               <h2 className="text-2xl font-semibold mb-2">Welcome to Surge</h2>
               <p className="text-gray-600 max-w-md mx-auto">
                 I can help you analyze data across multiple sources. Select a data source or ask a complex question to get started.
