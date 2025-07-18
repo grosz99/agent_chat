@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface RevenueTrendChartProps {
   data: Array<{
@@ -17,23 +17,10 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
     return (
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
-        <div className="h-80 bg-gray-100 rounded animate-pulse"></div>
+        <div className="h-64 bg-gray-100 rounded animate-pulse"></div>
       </div>
     );
   }
-
-  // Calculate percentage change from previous month
-  const dataWithChange = data.map((item, index) => {
-    let percentChange = 0;
-    if (index > 0) {
-      const prevRevenue = data[index - 1].revenue;
-      percentChange = ((item.revenue - prevRevenue) / prevRevenue) * 100;
-    }
-    return {
-      ...item,
-      percentChange: Math.round(percentChange * 10) / 10 // Round to 1 decimal
-    };
-  });
 
   const formatValue = (value: number) => {
     if (value >= 1000000) {
@@ -44,16 +31,20 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
     return `$${value}`;
   };
 
-  const formatPercent = (value: number) => {
-    return `${value > 0 ? '+' : ''}${value}%`;
-  };
+  // Calculate min and max for narrower Y-axis range
+  const revenues = data.map(item => item.revenue);
+  const minRevenue = Math.min(...revenues);
+  const maxRevenue = Math.max(...revenues);
+  const padding = (maxRevenue - minRevenue) * 0.1; // 10% padding
+  const yAxisMin = Math.max(0, minRevenue - padding);
+  const yAxisMax = maxRevenue + padding;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
       <h3 className="text-lg font-semibold mb-4 text-gray-900">Revenue Trend</h3>
-      <div className="h-80">
+      <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={dataWithChange}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="month" 
@@ -61,24 +52,13 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
               fontSize={12}
             />
             <YAxis 
-              yAxisId="revenue"
               stroke="#6b7280"
               fontSize={12}
               tickFormatter={formatValue}
-            />
-            <YAxis 
-              yAxisId="percent"
-              orientation="right"
-              stroke="#6b7280"
-              fontSize={12}
-              tickFormatter={(value) => `${value}%`}
+              domain={[yAxisMin, yAxisMax]}
             />
             <Tooltip 
-              formatter={(value: number, name: string) => {
-                if (name === 'Revenue') return [formatValue(value), name];
-                if (name === 'Change') return [formatPercent(value), '% Change'];
-                return [value, name];
-              }}
+              formatter={(value: number, name: string) => [formatValue(value), name]}
               labelStyle={{ color: '#374151' }}
               contentStyle={{ 
                 backgroundColor: '#ffffff', 
@@ -88,7 +68,6 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
               }}
             />
             <Line 
-              yAxisId="revenue"
               type="monotone" 
               dataKey="revenue" 
               stroke="#0e5f3f" 
@@ -97,15 +76,7 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
               activeDot={{ r: 6, fill: '#0e5f3f' }}
               name="Revenue"
             />
-            <Bar 
-              yAxisId="percent"
-              dataKey="percentChange"
-              fill="#9ca3af"
-              name="Change"
-              opacity={0.6}
-              maxBarSize={20}
-            />
-          </ComposedChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
