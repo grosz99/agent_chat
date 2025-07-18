@@ -99,7 +99,7 @@ export function ScenarioPlanning() {
 
     try {
       // This will be the same logic from the original page.tsx
-      const response = await fetch('/api/snowflake-query', {
+      const response = await fetch('/api/test-simple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
