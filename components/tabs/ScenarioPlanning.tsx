@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, BarChart3, Database, Users, PlusCircle, Brain } from 'lucide-react';
 import Image from 'next/image';
-import { CompactAgentFlow } from '@/components/visualization/CompactAgentFlow';
+import CompactAgentFlow from '@/components/visualization/CompactAgentFlow';
 
 interface ChatMessage {
   id: string;
@@ -274,10 +274,10 @@ export function ScenarioPlanning() {
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-6">
           {/* Agent Flow Animation */}
-          {showAgentFlow && (
+          {showAgentFlow && pendingResponse && (
             <div className="mb-6">
               <CompactAgentFlow 
-                currentStep={agentFlowStep}
+                query={inputMessage}
                 onComplete={() => {
                   setShowAgentFlow(false);
                   setAgentFlowStep(0);
