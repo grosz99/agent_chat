@@ -100,9 +100,10 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
             <Bar 
               yAxisId="percent"
               dataKey="percentChange"
-              fill="#187955"
+              fill="#9ca3af"
               name="Change"
-              opacity={0.7}
+              opacity={0.6}
+              maxBarSize={20}
             />
           </ComposedChart>
         </ResponsiveContainer>
