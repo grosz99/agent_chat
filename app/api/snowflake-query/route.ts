@@ -168,18 +168,12 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      success: true,
-      agent: {
-        id: agentId,
-        name: agentName
-      },
-      response: {
-        content: `Based on your query "${userQuery}", I've analyzed the ${agentName.toLowerCase()} and found the following results:`,
+      result: {
+        message: `Based on your query "${userQuery}", I've analyzed the ${agentName.toLowerCase()} and found the following results:`,
         data: results,
-        sql: sqlQuery,
-        confidence: 0.9,
+        agentId: agentId,
         insights,
-        reasoning: `I executed a SQL query against our ${agentName.toLowerCase()} to retrieve the most relevant information for your request.`
+        chart: null
       }
     });
 
