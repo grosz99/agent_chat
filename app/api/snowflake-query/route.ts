@@ -180,9 +180,21 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Snowflake query failed:', error);
     
+    // Add debugging information
+    const envVarStatus = {
+      SNOWFLAKE_ACCOUNT: !!process.env.SNOWFLAKE_ACCOUNT,
+      SNOWFLAKE_USER: !!process.env.SNOWFLAKE_USER,
+      SNOWFLAKE_PASSWORD: !!process.env.SNOWFLAKE_PASSWORD,
+      SNOWFLAKE_PRIVATE_KEY: !!process.env.SNOWFLAKE_PRIVATE_KEY,
+      SNOWFLAKE_DATABASE: !!process.env.SNOWFLAKE_DATABASE,
+      SNOWFLAKE_WAREHOUSE: !!process.env.SNOWFLAKE_WAREHOUSE,
+      SNOWFLAKE_SCHEMA: !!process.env.SNOWFLAKE_SCHEMA
+    };
+    
     return NextResponse.json({
       error: 'Query execution failed',
-      details: error instanceof Error ? error.message : String(error)
+      details: error instanceof Error ? error.message : String(error),
+      envVarStatus
     }, { status: 500 });
   }
 }
