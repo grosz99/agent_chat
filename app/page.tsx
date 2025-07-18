@@ -39,8 +39,8 @@ export default function Home() {
               <Image 
                 src="/surge-logo.svg" 
                 alt="Surge Logo" 
-                width={40} 
-                height={40}
+                width={60} 
+                height={60}
                 className="rounded-lg"
               />
             </div>

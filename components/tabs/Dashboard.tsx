@@ -138,7 +138,7 @@ export function Dashboard() {
 
         {/* Search Bar */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold mb-4">Ask Questions About This Data</h3>
+          <h3 className="text-lg font-semibold mb-4">Ask Surge</h3>
           <div className="flex gap-2 mb-4">
             <input
               type="text"
