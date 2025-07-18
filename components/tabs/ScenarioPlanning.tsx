@@ -55,7 +55,7 @@ const dataSources: DataSource[] = [
     name: 'HR Analytics',
     description: 'Office attendance and workforce metrics',
     icon: Users,
-    color: 'bg-[var(--secondary-color)]'
+    color: 'bg-[#187955]'
   }
 ];
 

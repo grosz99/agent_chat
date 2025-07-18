@@ -13,23 +13,22 @@ export async function POST(request: NextRequest) {
     let sqlQuery: string;
     let agentName: string;
     
-    if (agentId === 'ncc-financial' || (userQuery.toLowerCase().includes('revenue') || userQuery.toLowerCase().includes('financial')) && agentId !== 'pipeline-analytics' && agentId !== 'attendance-analytics') {
-      agentName = 'Financial Data Agent';
+    if (agentId === 'pipeline-analytics' || userQuery.toLowerCase().includes('deals') || userQuery.toLowerCase().includes('pipeline') || userQuery.toLowerCase().includes('sales')) {
+      agentName = 'Sales Pipeline Agent';
       sqlQuery = `
         SELECT 
-          'North America' as region,
-          1500000 as revenue,
-          'Q4 2024' as period
+          'Acme Corp' as client_name,
+          3200000 as deal_value,
+          'Strategic' as deal_type,
+          '2024-03-15' as close_date,
+          'Medium' as confidence
         UNION ALL
-        SELECT 'Europe', 1200000, 'Q4 2024'
+        SELECT 'TechFlow Inc', 2500000, 'Enterprise', '2024-02-28', 'High'
         UNION ALL  
-        SELECT 'Asia Pacific', 900000, 'Q4 2024'
+        SELECT 'DataVision LLC', 1800000, 'Mid-Market', '2024-04-10', 'Medium'
         UNION ALL
-        SELECT 'Latin America', 400000, 'Q4 2024'
-        UNION ALL
-        SELECT 'Middle East', 300000, 'Q4 2024'
-        ORDER BY revenue DESC
-        LIMIT 5
+        SELECT 'CloudSync Solutions', 950000, 'SMB', '2024-03-05', 'High'
+        ORDER BY deal_value DESC
       `;
     } else if (agentId === 'attendance-analytics' || userQuery.toLowerCase().includes('attendance') || userQuery.toLowerCase().includes('office')) {
       agentName = 'HR Analytics Agent';
@@ -48,21 +47,23 @@ export async function POST(request: NextRequest) {
         SELECT 'Sydney', 79.8, '2024-12'
         ORDER BY attendance_rate DESC
       `;
-    } else if (agentId === 'pipeline-analytics' || userQuery.toLowerCase().includes('sales') || userQuery.toLowerCase().includes('pipeline') || userQuery.toLowerCase().includes('deals')) {
-      agentName = 'Sales Pipeline Agent';
+    } else if (agentId === 'ncc-financial' || userQuery.toLowerCase().includes('revenue') || userQuery.toLowerCase().includes('financial')) {
+      agentName = 'Financial Data Agent';
       sqlQuery = `
         SELECT 
-          'Enterprise' as deal_type,
-          2500000 as pipeline_value,
-          12 as deal_count,
-          'High' as confidence
+          'North America' as region,
+          1500000 as revenue,
+          'Q4 2024' as period
         UNION ALL
-        SELECT 'Mid-Market', 1800000, 28, 'Medium'
+        SELECT 'Europe', 1200000, 'Q4 2024'
+        UNION ALL  
+        SELECT 'Asia Pacific', 900000, 'Q4 2024'
         UNION ALL
-        SELECT 'SMB', 950000, 45, 'High'
+        SELECT 'Latin America', 400000, 'Q4 2024'
         UNION ALL
-        SELECT 'Strategic', 3200000, 5, 'Medium'
-        ORDER BY pipeline_value DESC
+        SELECT 'Middle East', 300000, 'Q4 2024'
+        ORDER BY revenue DESC
+        LIMIT 5
       `;
     } else {
       agentName = 'Financial Data Agent';
