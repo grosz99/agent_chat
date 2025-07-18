@@ -55,7 +55,7 @@ const dataSources: DataSource[] = [
     name: 'HR Analytics',
     description: 'Office attendance and workforce metrics',
     icon: Users,
-    color: 'bg-blue-600'
+    color: 'bg-[var(--secondary-color)]'
   }
 ];
 
@@ -65,6 +65,7 @@ export function ScenarioPlanning() {
   const [selectedDataSource, setSelectedDataSource] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [showAgentFlow, setShowAgentFlow] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState<string>('');
   const [pendingResponse, setPendingResponse] = useState<{message: string, data?: any, insights?: string[], agentId?: string} | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMountedRef = useRef(true);
@@ -121,7 +122,8 @@ export function ScenarioPlanning() {
         };
         setPendingResponse(responseData);
         
-        // Show agent flow animation
+        // Store query and show agent flow animation
+        setCurrentQuery(inputMessage);
         setShowAgentFlow(true);
       } else if (isMountedRef.current) {
         console.error('API Error Response:', data);
@@ -149,6 +151,7 @@ export function ScenarioPlanning() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
+        setCurrentQuery('');
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -163,6 +166,7 @@ export function ScenarioPlanning() {
         setShowAgentFlow(false);
         setIsLoading(false);
         setPendingResponse(null);
+        setCurrentQuery('');
       }
     }
   };
@@ -179,11 +183,11 @@ export function ScenarioPlanning() {
   };
 
   const sampleQueries = [
-    "What are the top 5 regions by revenue?",
     "Which deals can help fill revenue gaps?",
-    "Compare sales pipeline performance across regions",
-    "Show me attendance trends by office",
-    "Analyze correlation between attendance and sales performance"
+    "What clients have the highest pipeline value?",
+    "Show me enterprise deals closing this quarter",
+    "Which strategic accounts need attention?",
+    "Compare high-value opportunities by deal type"
   ];
 
   return (
@@ -255,12 +259,12 @@ export function ScenarioPlanning() {
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-6">
           {/* Agent Flow Animation */}
-          {showAgentFlow && pendingResponse && (
+          {showAgentFlow && (
             <div className="mb-6">
               <CompactAgentFlow 
-                query={inputMessage}
+                query={currentQuery}
                 onComplete={() => {
-                  // When animation completes, add the message and clean up
+                  // When animation completes, add the message but keep orchestrator visible
                   if (pendingResponse && isMountedRef.current) {
                     const assistantMessage: ChatMessage = {
                       id: (Date.now() + 1).toString(),
@@ -274,7 +278,7 @@ export function ScenarioPlanning() {
                     };
                     
                     setMessages(prev => [...prev, assistantMessage]);
-                    setShowAgentFlow(false);
+                    // Keep showAgentFlow true to leave orchestrator diagram visible
                     setIsLoading(false);
                     setPendingResponse(null);
                   }

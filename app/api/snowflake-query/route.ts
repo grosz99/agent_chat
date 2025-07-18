@@ -90,10 +90,10 @@ export async function POST(request: NextRequest) {
       ];
     } else if (agentName === 'Sales Pipeline Agent') {
       results = [
-        { DEAL_TYPE: 'Strategic', PIPELINE_VALUE: 3200000, DEAL_COUNT: 5, CONFIDENCE: 'Medium' },
-        { DEAL_TYPE: 'Enterprise', PIPELINE_VALUE: 2500000, DEAL_COUNT: 12, CONFIDENCE: 'High' },
-        { DEAL_TYPE: 'Mid-Market', PIPELINE_VALUE: 1800000, DEAL_COUNT: 28, CONFIDENCE: 'Medium' },
-        { DEAL_TYPE: 'SMB', PIPELINE_VALUE: 950000, DEAL_COUNT: 45, CONFIDENCE: 'High' }
+        { CLIENT_NAME: 'Acme Corp', DEAL_VALUE: 3200000, DEAL_TYPE: 'Strategic', CLOSE_DATE: '2024-03-15', CONFIDENCE: 'Medium' },
+        { CLIENT_NAME: 'TechFlow Inc', DEAL_VALUE: 2500000, DEAL_TYPE: 'Enterprise', CLOSE_DATE: '2024-02-28', CONFIDENCE: 'High' },
+        { CLIENT_NAME: 'DataVision LLC', DEAL_VALUE: 1800000, DEAL_TYPE: 'Mid-Market', CLOSE_DATE: '2024-04-10', CONFIDENCE: 'Medium' },
+        { CLIENT_NAME: 'CloudSync Solutions', DEAL_VALUE: 950000, DEAL_TYPE: 'SMB', CLOSE_DATE: '2024-03-05', CONFIDENCE: 'High' }
       ];
     } else {
       results = [{ TIMESTAMP: new Date().toISOString(), MESSAGE: 'Welcome to BeaconAgent!' }];
@@ -115,9 +115,9 @@ export async function POST(request: NextRequest) {
       ];
     } else if (agentId === 'pipeline-analytics') {
       insights = [
-        'Strategic deals represent highest value per deal',
-        'SMB segment has most deals with highest confidence',
-        'Total pipeline value: $8.45M across 90 deals'
+        'Acme Corp offers highest deal value at $3.2M',
+        'TechFlow Inc has highest confidence rating',
+        'Total pipeline value: $8.45M across 4 key clients'
       ];
     }
 
