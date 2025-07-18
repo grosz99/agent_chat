@@ -55,7 +55,7 @@ const dataSources: DataSource[] = [
     name: 'HR Analytics',
     description: 'Office attendance and workforce metrics',
     icon: Users,
-    color: 'bg-[var(--secondary-color)]'
+    color: 'bg-blue-600'
   }
 ];
 
@@ -106,7 +106,7 @@ export function ScenarioPlanning() {
         },
         body: JSON.stringify({
           query: inputMessage,
-          dataSource: selectedDataSource || null
+          agentId: selectedDataSource || null
         })
       });
 
@@ -150,7 +150,16 @@ export function ScenarioPlanning() {
           }
         }, minDemoTime);
       } else if (isMountedRef.current) {
-        let errorContent = `Sorry, I encountered an error: ${data.error}`;
+        console.error('API Error Response:', data);
+        let errorContent = `Sorry, I encountered an error`;
+        
+        if (data.error) {
+          errorContent += `: ${data.error}`;
+        }
+        
+        if (data.details) {
+          errorContent += `\n\nDetails: ${data.details}`;
+        }
         
         if (data.missing && data.missing.length > 0) {
           errorContent += `\n\nMissing environment variables: ${data.missing.join(', ')}`;
@@ -174,7 +183,7 @@ export function ScenarioPlanning() {
         const errorMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: `Sorry, I'm having trouble processing your request. Please try again.`,
+          content: `Sorry, I'm having trouble processing your request. ${error instanceof Error ? error.message : 'Please try again.'}`,
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);

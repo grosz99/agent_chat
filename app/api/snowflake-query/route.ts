@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       
       connectionConfig = {
         account: process.env.SNOWFLAKE_ACCOUNT,
-        username: process.env.SNOWFLAKE_USER,
+        username: process.env.SNOWFLAKE_USERNAME,
         authenticator: 'SNOWFLAKE_JWT',
         privateKey: privateKey,
         database: process.env.SNOWFLAKE_DATABASE,
