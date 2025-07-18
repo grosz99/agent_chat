@@ -37,16 +37,16 @@ export default function Home() {
           <div className="flex items-center space-x-3">
             <div className="relative">
               <Image 
-                src="/logo.svg" 
-                alt="Beacon Logo" 
+                src="/surge-logo.svg" 
+                alt="Surge Logo" 
                 width={40} 
                 height={40}
                 className="rounded-lg"
               />
             </div>
             <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--primary-color)' }}>BeaconAgent</h1>
-              <p className="text-sm text-secondary">Multi-Agent Data Platform</p>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--primary-color)' }}>Surge</h1>
+              <p className="text-sm text-secondary">Don't keep pace - surge ahead</p>
             </div>
           </div>
         </div>

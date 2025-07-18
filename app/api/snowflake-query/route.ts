@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       `;
     } else {
       agentName = 'Financial Data Agent';
-      sqlQuery = 'SELECT CURRENT_TIMESTAMP() as timestamp, \'Welcome to BeaconAgent!\' as message';
+      sqlQuery = 'SELECT CURRENT_TIMESTAMP() as timestamp, \'Welcome to Surge!\' as message';
     }
 
     // For demo purposes, return mock data directly instead of connecting to Snowflake
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
         { CLIENT_NAME: 'CloudSync Solutions', DEAL_VALUE: 950000, DEAL_TYPE: 'SMB', CLOSE_DATE: '2024-03-05', CONFIDENCE: 'High' }
       ];
     } else {
-      results = [{ TIMESTAMP: new Date().toISOString(), MESSAGE: 'Welcome to BeaconAgent!' }];
+      results = [{ TIMESTAMP: new Date().toISOString(), MESSAGE: 'Welcome to Surge!' }];
     }
 
     // Generate insights based on the data

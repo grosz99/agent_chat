@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BeaconAgent",
-  description: "Multi-Agent Data Platform",
+  title: "Surge",
+  description: "Don't keep pace - surge ahead",
 };
 
 export default function RootLayout({
