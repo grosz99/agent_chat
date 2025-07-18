@@ -195,7 +195,7 @@ export function ScenarioPlanning() {
       {/* Sidebar - Data Sources */}
       <div className="w-80 bg-white border-r flex flex-col shadow-lg" style={{ borderColor: 'var(--border-light)' }}>
         <div className="p-6 border-b" style={{ borderColor: 'var(--border-light)', background: 'var(--background)' }}>
-          <h3 className="text-lg font-semibold mb-2">Scenario Planning</h3>
+          <h3 className="text-lg font-semibold mb-2">Scenario Planning With Surge</h3>
           <p className="text-sm text-gray-600">Multi-agent orchestration for complex queries</p>
         </div>
 
