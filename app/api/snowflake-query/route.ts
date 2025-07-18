@@ -71,11 +71,9 @@ export async function POST(request: NextRequest) {
     
     console.log('Snowflake query request:', { userQuery, agentId });
     
-    // Check if Snowflake is properly configured
-    if (!process.env.SNOWFLAKE_USER || !process.env.SNOWFLAKE_ACCOUNT) {
-      console.log('Snowflake not properly configured, using mock data');
-      return NextResponse.json(getMockData(userQuery, agentId));
-    }
+    // Always use mock data for demo - Snowflake config issues
+    console.log('Using mock data for demo');
+    return NextResponse.json(getMockData(userQuery, agentId));
     
     // Simple query mapping based on user input
     let sqlQuery: string;
