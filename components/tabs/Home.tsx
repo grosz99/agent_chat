@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText, Database, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface Agent {
   id: string;
@@ -106,7 +107,7 @@ export function Home({ onTabChange }: HomeProps) {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Explore agents that you have access to</h1>
-            <p className="text-gray-600">Select an agent to begin your analysis</p>
+            <p className="text-gray-600">Review what is in each agent and request access as needed</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-600">Welcome,</p>
@@ -168,8 +169,15 @@ export function Home({ onTabChange }: HomeProps) {
         <div className="mt-12 text-center">
           <button
             onClick={handleBeaconClick}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-dark)] transition-colors"
           >
+            <Image 
+              src="/logo.svg" 
+              alt="Beacon Logo" 
+              width={24} 
+              height={24}
+              className="brightness-0 invert"
+            />
             Start using your agents today in Beacon
             <ArrowRight className="w-4 h-4" />
           </button>
