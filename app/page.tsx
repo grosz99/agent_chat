@@ -2,13 +2,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { BarChart3, Database, Plug } from 'lucide-react';
+import { Home as HomeIcon, BarChart3, Database, Plug } from 'lucide-react';
 import { TabNavigation } from '@/components/tabs/TabNavigation';
+import { Home as HomePage } from '@/components/tabs/Home';
 import { ScenarioPlanning } from '@/components/tabs/ScenarioPlanning';
 import { Dashboard } from '@/components/tabs/Dashboard';
 import { Plugin } from '@/components/tabs/Plugin';
 
 const tabs = [
+  {
+    id: 'home',
+    label: 'Home',
+    icon: <HomeIcon className="w-4 h-4" />
+  },
   {
     id: 'scenario-planning',
     label: 'Beacon',
@@ -27,7 +33,7 @@ const tabs = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('scenario-planning');
+  const [activeTab, setActiveTab] = useState('home');
 
   return (
     <div className="flex flex-col h-screen font-sans" style={{ background: 'var(--background-secondary)', fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
@@ -61,6 +67,7 @@ export default function Home() {
 
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden">
+        {activeTab === 'home' && <HomePage />}
         {activeTab === 'scenario-planning' && <ScenarioPlanning />}
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'plugin' && <Plugin />}
