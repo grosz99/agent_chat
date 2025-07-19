@@ -67,7 +67,7 @@ export default function Home() {
 
       {/* Tab Content */}
       <div className="flex-1 overflow-hidden">
-        {activeTab === 'home' && <HomePage />}
+        {activeTab === 'home' && <HomePage onTabChange={setActiveTab} />}
         {activeTab === 'scenario-planning' && <ScenarioPlanning />}
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'plugin' && <Plugin />}
