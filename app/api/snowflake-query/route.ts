@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     let agentName: string;
     
     if (agentId === 'pipeline-analytics' || userQuery.toLowerCase().includes('deals') || userQuery.toLowerCase().includes('pipeline') || userQuery.toLowerCase().includes('sales')) {
-      agentName = 'Sales Pipeline Agent';
+      agentName = 'Pipeline Analytics Agent';
       sqlQuery = `
         SELECT 
           'Acme Corp' as client_name,
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         ORDER BY deal_value DESC
       `;
     } else if (agentId === 'attendance-analytics' || userQuery.toLowerCase().includes('attendance') || userQuery.toLowerCase().includes('office')) {
-      agentName = 'HR Analytics Agent';
+      agentName = 'Office Attendance Agent';
       sqlQuery = `
         SELECT 
           'New York' as office,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         ORDER BY attendance_rate DESC
       `;
     } else if (agentId === 'ncc-financial' || userQuery.toLowerCase().includes('revenue') || userQuery.toLowerCase().includes('financial')) {
-      agentName = 'Financial Data Agent';
+      agentName = 'NCC Agent';
       sqlQuery = `
         SELECT 
           'North America' as region,
@@ -66,14 +66,14 @@ export async function POST(request: NextRequest) {
         LIMIT 5
       `;
     } else {
-      agentName = 'Financial Data Agent';
+      agentName = 'NCC Agent';
       sqlQuery = 'SELECT CURRENT_TIMESTAMP() as timestamp, \'Welcome to Surge!\' as message';
     }
 
     // For demo purposes, return mock data directly instead of connecting to Snowflake
     let results: any[];
     
-    if (agentName === 'Financial Data Agent') {
+    if (agentName === 'NCC Agent') {
       results = [
         { REGION: 'North America', REVENUE: 1500000, PERIOD: 'Q4 2024' },
         { REGION: 'Europe', REVENUE: 1200000, PERIOD: 'Q4 2024' },
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
         { REGION: 'Latin America', REVENUE: 400000, PERIOD: 'Q4 2024' },
         { REGION: 'Middle East', REVENUE: 300000, PERIOD: 'Q4 2024' }
       ];
-    } else if (agentName === 'HR Analytics Agent') {
+    } else if (agentName === 'Office Attendance Agent') {
       results = [
         { OFFICE: 'Tokyo', ATTENDANCE_RATE: 91.3, MONTH: '2024-12' },
         { OFFICE: 'London', ATTENDANCE_RATE: 88.1, MONTH: '2024-12' },
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
         { OFFICE: 'San Francisco', ATTENDANCE_RATE: 82.7, MONTH: '2024-12' },
         { OFFICE: 'Sydney', ATTENDANCE_RATE: 79.8, MONTH: '2024-12' }
       ];
-    } else if (agentName === 'Sales Pipeline Agent') {
+    } else if (agentName === 'Pipeline Analytics Agent') {
       results = [
         { CLIENT_NAME: 'Acme Corp', DEAL_VALUE: 3200000, DEAL_TYPE: 'Strategic', CLOSE_DATE: '2024-03-15', CONFIDENCE: 'Medium' },
         { CLIENT_NAME: 'TechFlow Inc', DEAL_VALUE: 2500000, DEAL_TYPE: 'Enterprise', CLOSE_DATE: '2024-02-28', CONFIDENCE: 'High' },

@@ -70,10 +70,10 @@ export function RevenueTrendChart({ data, loading = false }: RevenueTrendChartPr
             <Line 
               type="monotone" 
               dataKey="revenue" 
-              stroke="#0e5f3f" 
+              stroke="#1B4332" 
               strokeWidth={3}
-              dot={{ fill: '#0e5f3f', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, fill: '#0e5f3f' }}
+              dot={{ fill: '#1B4332', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: '#1B4332' }}
               name="Revenue"
             />
           </LineChart>

@@ -38,21 +38,21 @@ function TimeDisplay({ timestamp }: { timestamp: Date }) {
 const dataSources: DataSource[] = [
   {
     id: 'ncc-financial',
-    name: 'Financial Data',
+    name: 'NCC Agent',
     description: 'Revenue, expenses, and financial metrics',
     icon: BarChart3,
     color: 'bg-[var(--primary-color)]'
   },
   {
     id: 'pipeline-analytics', 
-    name: 'Sales Pipeline',
+    name: 'Pipeline Analytics Agent',
     description: 'Deals, opportunities, and sales metrics',
     icon: Database,
     color: 'bg-[var(--primary-light)]'
   },
   {
     id: 'attendance-analytics',
-    name: 'HR Analytics',
+    name: 'Office Attendance Agent',
     description: 'Office attendance and workforce metrics',
     icon: Users,
     color: 'bg-[#187955]'

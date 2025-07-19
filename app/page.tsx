@@ -22,7 +22,7 @@ const tabs = [
   },
   {
     id: 'dashboard',
-    label: 'Dashboard',
+    label: 'MyMetrics',
     icon: <BarChart3 className="w-4 h-4" />
   },
   {

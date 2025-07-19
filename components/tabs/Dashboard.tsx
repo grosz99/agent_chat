@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, Target, Users, Send, BarChart3 } from 'lucide-react';
+import Image from 'next/image';
 import { KPICard } from '@/components/dashboard/KPICard';
 import { RevenueTrendChart } from '@/components/dashboard/RevenueTrendChart';
 
@@ -94,7 +95,7 @@ export function Dashboard() {
   return (
     <div className="flex flex-col h-full overflow-y-auto">
       <div className="p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Revenue Dashboard</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">My Metrics</h2>
         
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -138,7 +139,15 @@ export function Dashboard() {
 
         {/* Search Bar */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold mb-4">Ask Surge</h3>
+          <div className="flex items-center gap-3 mb-4">
+            <Image 
+              src="/surge-logo.svg" 
+              alt="Surge Logo" 
+              width={30} 
+              height={30}
+            />
+            <h3 className="text-lg font-semibold">Ask Surge</h3>
+          </div>
           <div className="flex gap-2 mb-4">
             <input
               type="text"
@@ -170,7 +179,7 @@ export function Dashboard() {
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-700">Financial Agent</p>
+                  <p className="text-sm font-medium text-gray-700">NCC Agent</p>
                   <p className="text-xs text-gray-500">Analyzing revenue data...</p>
                 </div>
                 <div className="w-4 h-4 border-2 border-[var(--primary-color)] border-t-transparent rounded-full animate-spin"></div>
@@ -185,7 +194,7 @@ export function Dashboard() {
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-700">Financial Agent</p>
+                  <p className="text-sm font-medium text-gray-700">NCC Agent</p>
                   <p className="text-xs text-gray-500">Analysis complete</p>
                 </div>
               </div>
