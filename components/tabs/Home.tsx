@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText, Database } from 'lucide-react';
 
 interface Agent {
   id: string;
@@ -17,8 +17,8 @@ const agents: Agent[] = [
     id: 'ncc',
     name: 'NCC',
     description: 'Revenue tracking and forecasting',
-    icon: <DollarSign className="w-6 h-6" />,
-    color: 'bg-green-500',
+    icon: <BarChart3 className="w-6 h-6" />,
+    color: 'bg-[#1B4332]',
     available: true
   },
   {
@@ -26,7 +26,7 @@ const agents: Agent[] = [
     name: 'Billability',
     description: 'Resource utilization analytics',
     icon: <Clock className="w-6 h-6" />,
-    color: 'bg-blue-500',
+    color: 'bg-[#1B4332]',
     available: false
   },
   {
@@ -34,7 +34,7 @@ const agents: Agent[] = [
     name: 'Investments',
     description: 'Portfolio performance tracking',
     icon: <TrendingUp className="w-6 h-6" />,
-    color: 'bg-purple-500',
+    color: 'bg-[#1B4332]',
     available: false
   },
   {
@@ -42,15 +42,15 @@ const agents: Agent[] = [
     name: 'Staffing',
     description: 'Workforce planning and allocation',
     icon: <Users className="w-6 h-6" />,
-    color: 'bg-indigo-500',
+    color: 'bg-[#1B4332]',
     available: false
   },
   {
     id: 'pipeline',
     name: 'Pipeline',
     description: 'Sales pipeline management',
-    icon: <BarChart3 className="w-6 h-6" />,
-    color: 'bg-orange-500',
+    icon: <Database className="w-6 h-6" />,
+    color: 'bg-[#1B4332]',
     available: true
   },
   {
@@ -58,15 +58,15 @@ const agents: Agent[] = [
     name: 'SCA',
     description: 'Strategic client analytics',
     icon: <FileText className="w-6 h-6" />,
-    color: 'bg-red-500',
+    color: 'bg-[#1B4332]',
     available: false
   },
   {
     id: 'office-attendance',
     name: 'Office Attendance',
     description: 'Workplace analytics and trends',
-    icon: <Building className="w-6 h-6" />,
-    color: 'bg-teal-500',
+    icon: <Users className="w-6 h-6" />,
+    color: 'bg-[#1B4332]',
     available: true
   },
   {
@@ -74,7 +74,7 @@ const agents: Agent[] = [
     name: 'DSO',
     description: 'Days sales outstanding metrics',
     icon: <Calendar className="w-6 h-6" />,
-    color: 'bg-yellow-500',
+    color: 'bg-[#1B4332]',
     available: false
   }
 ];
@@ -114,7 +114,7 @@ export function Home() {
                 </div>
                 {!agent.available && (
                   <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                    Coming Soon
+                    Request Access
                   </span>
                 )}
               </div>
@@ -124,16 +124,6 @@ export function Home() {
           ))}
         </div>
 
-        {/* Platform Info */}
-        <div className="mt-12 text-center max-w-3xl mx-auto">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Don't keep pace - surge ahead
-          </h2>
-          <p className="text-gray-600">
-            Surge provides intelligent agent-based analytics across your entire business ecosystem. 
-            Each agent specializes in specific domains, working together to provide comprehensive insights.
-          </p>
-        </div>
       </div>
     </div>
   );
