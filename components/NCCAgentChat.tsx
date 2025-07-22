@@ -3,12 +3,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Upload, X, FileText, BarChart3, Settings } from 'lucide-react';
 import { AgentConfigView } from './AgentConfigView';
+import { DataTable } from './DataTable';
+
+interface TableData {
+  headers: string[];
+  rows: any[];
+  total_rows: number;
+  downloadable: boolean;
+}
 
 interface Message {
   id: string;
   content: string;
   sender: 'user' | 'agent';
   timestamp: Date;
+  tableData?: TableData;
 }
 
 interface NCCAgentChatProps {
@@ -73,7 +82,8 @@ export function NCCAgentChat({ onClose }: NCCAgentChatProps) {
         id: (Date.now() + 1).toString(),
         content: data.response || 'Sorry, I encountered an error processing your request.',
         sender: 'agent',
-        timestamp: new Date()
+        timestamp: new Date(),
+        tableData: data.table_data || undefined
       };
 
       setMessages(prev => [...prev, agentMessage]);
@@ -233,6 +243,14 @@ export function NCCAgentChat({ onClose }: NCCAgentChatProps) {
                 }`}
               >
                 <p className="whitespace-pre-wrap">{message.content}</p>
+                {message.tableData && (
+                  <div className="mt-3">
+                    <DataTable 
+                      data={message.tableData} 
+                      title={`Analysis Results (${message.timestamp.toLocaleDateString()})`} 
+                    />
+                  </div>
+                )}
                 <p className="text-xs opacity-70 mt-1">
                   {message.timestamp.toLocaleTimeString()}
                 </p>

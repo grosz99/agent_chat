@@ -77,7 +77,9 @@ RESPONSE STYLE:
 - Explain what the numbers mean for business performance
 - Suggest actionable insights when possible
 - Format responses in a professional, executive summary style
-- Reference uploaded documents when they contain relevant information`
+- Reference uploaded documents when they contain relevant information
+- When analyzing data, explain what's shown in the accompanying data table
+- Highlight key data points that executives should focus on in the table`
             },
             {
               role: 'user',
@@ -96,16 +98,27 @@ RESPONSE STYLE:
 
       const openaiData = await openaiResponse.json();
       console.log('OpenAI response:', openaiData);
+
+      // Extract data for table generation
+      const tableData = dbResult.error ? [] : dbResult.data;
+      const hasData = tableData && tableData.length > 0;
       
       return NextResponse.json({
         response: openaiData.choices?.[0]?.message?.content || 'No response generated',
         database_queried: true,
         database_status: dbResult.error ? 'error' : 'success',
         status: 'success',
+        table_data: hasData ? {
+          headers: hasData ? Object.keys(tableData[0]) : [],
+          rows: tableData,
+          total_rows: tableData.length,
+          downloadable: true
+        } : null,
         debug: {
           db_result: dbResult.error ? 'error' : 'success',
           kb_docs: getKnowledgeBase().getAllDocuments().length,
-          openai_used: !!openaiData.choices?.[0]?.message?.content
+          openai_used: !!openaiData.choices?.[0]?.message?.content,
+          table_rows: hasData ? tableData.length : 0
         }
       });
     }
