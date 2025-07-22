@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText, Database, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { NCCAgentChat } from '../NCCAgentChat';
 
 interface Agent {
   id: string;
@@ -94,9 +95,20 @@ const agents: Agent[] = [
 ];
 
 export function Home({ onTabChange }: HomeProps) {
+  const [showNCCChat, setShowNCCChat] = useState(false);
+
   const handleBeaconClick = () => {
     if (onTabChange) {
       onTabChange('scenario-planning');
+    }
+  };
+
+  const handleAgentClick = (agentId: string) => {
+    if (agentId === 'ncc') {
+      setShowNCCChat(true);
+    } else {
+      // For other agents, show request access
+      alert('Request submitted for ' + agents.find(a => a.id === agentId)?.name + ' agent access');
     }
   };
 
@@ -122,6 +134,7 @@ export function Home({ onTabChange }: HomeProps) {
           {agents.map((agent) => (
             <div
               key={agent.id}
+              onClick={() => agent.available && handleAgentClick(agent.id)}
               className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-all duration-200 relative group ${
                 agent.available 
                   ? 'hover:shadow-lg hover:border-[var(--primary-color)] cursor-pointer' 
@@ -183,6 +196,11 @@ export function Home({ onTabChange }: HomeProps) {
           </button>
         </div>
       </div>
+
+      {/* NCC Agent Chat Modal */}
+      {showNCCChat && (
+        <NCCAgentChat onClose={() => setShowNCCChat(false)} />
+      )}
     </div>
   );
 }
