@@ -20,8 +20,13 @@ export class NCCDatabase {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_KEY;
 
+    console.log('Supabase config check:', {
+      url: supabaseUrl ? 'SET' : 'NOT SET',
+      key: supabaseKey ? 'SET' : 'NOT SET'
+    });
+
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing Supabase configuration');
+      throw new Error(`Missing Supabase configuration - URL: ${supabaseUrl ? 'SET' : 'NOT SET'}, KEY: ${supabaseKey ? 'SET' : 'NOT SET'}`);
     }
 
     this.supabase = createClient(supabaseUrl, supabaseKey);

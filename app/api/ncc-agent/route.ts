@@ -12,11 +12,15 @@ export async function POST(request: NextRequest) {
     const { message, action = 'chat' } = body;
 
     if (action === 'chat') {
+      console.log('NCC Agent chat request:', message);
+      
       // Get data from NCC database
       const dbResult = await nccDatabase.queryData(message);
+      console.log('Database result:', dbResult);
       
       // Get context from knowledge base
       const kbContext = knowledgeBase.getContextForQuery(message);
+      console.log('Knowledge base context length:', kbContext.length);
       
       // Prepare context for OpenAI
       const context = dbResult.error 
@@ -24,6 +28,7 @@ export async function POST(request: NextRequest) {
         : `Database query results: ${JSON.stringify(dbResult.data, null, 2)}`;
       
       const fullContext = `Database context: ${context}\n\nKnowledge Base Context: ${kbContext}`;
+      console.log('Full context length:', fullContext.length);
 
       // Call OpenAI API
       const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -69,13 +74,24 @@ RESPONSE STYLE:
         }),
       });
 
+      if (!openaiResponse.ok) {
+        console.error('OpenAI API error:', openaiResponse.status, await openaiResponse.text());
+        throw new Error(`OpenAI API error: ${openaiResponse.status}`);
+      }
+
       const openaiData = await openaiResponse.json();
+      console.log('OpenAI response:', openaiData);
       
       return NextResponse.json({
         response: openaiData.choices?.[0]?.message?.content || 'No response generated',
         database_queried: true,
         database_status: dbResult.error ? 'error' : 'success',
-        status: 'success'
+        status: 'success',
+        debug: {
+          db_result: dbResult.error ? 'error' : 'success',
+          kb_docs: knowledgeBase.getAllDocuments().length,
+          openai_used: !!openaiData.choices?.[0]?.message?.content
+        }
       });
     }
 
