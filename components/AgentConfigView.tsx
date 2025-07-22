@@ -27,8 +27,8 @@ export function AgentConfigView({ onClose }: AgentConfigViewProps) {
               <Settings className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">NCC Agent Configuration</h2>
-              <p className="text-sm opacity-90">See how easy it is to set up an agent</p>
+              <h2 className="text-lg font-semibold">Create New Agent</h2>
+              <p className="text-sm opacity-90">Set up a custom agent in 4 simple steps</p>
             </div>
           </div>
           <button
@@ -74,9 +74,9 @@ export function AgentConfigView({ onClose }: AgentConfigViewProps) {
               <div className="bg-gray-50 p-4 rounded-lg mb-4">
                 <h4 className="font-medium mb-2">Business Context</h4>
                 <textarea
-                  readOnly
-                  className="w-full h-32 p-3 bg-white border rounded resize-none"
-                  value={`You are a specialized business intelligence assistant for analyzing consulting firm financial data.
+                  className="w-full h-32 p-3 bg-white border rounded"
+                  placeholder="Enter your agent's instructions..."
+                  defaultValue={`You are a specialized business intelligence assistant for analyzing consulting firm financial data.
 
 BUSINESS CONTEXT:
 - NCC = Net Cash Contribution (key performance metric)
@@ -113,16 +113,12 @@ RESPONSE STYLE:
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input
                       type="text"
-                      placeholder="Supabase URL"
-                      value="https://gfprvjfahdmlcmveimvi.supabase.co"
-                      readOnly
+                      placeholder="Enter your Supabase URL"
                       className="px-3 py-2 bg-white border rounded"
                     />
                     <input
                       type="password"
-                      placeholder="Supabase Key"
-                      value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                      readOnly
+                      placeholder="Enter your Supabase Key"
                       className="px-3 py-2 bg-white border rounded"
                     />
                   </div>
@@ -136,9 +132,7 @@ RESPONSE STYLE:
                   <h4 className="font-medium mb-2">OpenAI Integration</h4>
                   <input
                     type="password"
-                    placeholder="OpenAI API Key"
-                    value="sk-svcacct-HD5H4sAuMErJoOQrc2F..."
-                    readOnly
+                    placeholder="Enter your OpenAI API Key"
                     className="w-full px-3 py-2 bg-white border rounded"
                   />
                   <div className="mt-2 flex items-center gap-2 text-green-600">
@@ -172,20 +166,13 @@ RESPONSE STYLE:
               
               <div className="space-y-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Uploaded Documents</h4>
+                  <h4 className="font-medium mb-2">Upload Documents</h4>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-3 p-3 bg-white rounded border">
-                      <Upload className="w-4 h-4 text-gray-500" />
-                      <span>company_strategy.txt</span>
-                      <span className="text-sm text-gray-500">(329 bytes)</span>
-                      <Check className="w-4 h-4 text-green-500 ml-auto" />
+                    <div className="flex items-center gap-3 p-3 bg-white rounded border border-dashed">
+                      <Upload className="w-4 h-4 text-gray-400" />
+                      <span className="text-gray-500">Drag and drop files here or click to browse</span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-white rounded border">
-                      <Upload className="w-4 h-4 text-gray-500" />
-                      <span>ncc_targets.txt</span>
-                      <span className="text-sm text-gray-500">(645 bytes)</span>
-                      <Check className="w-4 h-4 text-green-500 ml-auto" />
-                    </div>
+                    <p className="text-sm text-gray-500">Upload business documents, strategy files, or any context your agent needs</p>
                   </div>
                 </div>
 
@@ -223,8 +210,8 @@ RESPONSE STYLE:
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Check className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">NCC Agent Ready!</h3>
-                <p className="text-gray-600">Your agent is configured and ready to analyze NCC data.</p>
+                <h3 className="text-xl font-semibold mb-2">Agent Created Successfully!</h3>
+                <p className="text-gray-600">Your custom agent is configured and ready to use.</p>
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
@@ -232,19 +219,19 @@ RESPONSE STYLE:
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    <span>Analyze NCC performance by region</span>
+                    <span>Query and analyze your data</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    <span>Track sector-specific trends</span>
+                    <span>Generate intelligent insights</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    <span>Provide strategic recommendations</span>
+                    <span>Provide domain-specific recommendations</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-500" />
-                    <span>Reference uploaded business documents</span>
+                    <span>Reference uploaded documents</span>
                   </div>
                 </div>
               </div>

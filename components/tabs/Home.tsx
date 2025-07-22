@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText, Database, ArrowRight } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, Calendar, Building, Clock, FileText, Database, ArrowRight, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { NCCAgentChat } from '../NCCAgentChat';
+import { AgentConfigView } from '../AgentConfigView';
 
 interface Agent {
   id: string;
@@ -96,6 +97,7 @@ const agents: Agent[] = [
 
 export function Home({ onTabChange }: HomeProps) {
   const [showNCCChat, setShowNCCChat] = useState(false);
+  const [showAddAgent, setShowAddAgent] = useState(false);
 
   const handleBeaconClick = () => {
     if (onTabChange) {
@@ -131,6 +133,20 @@ export function Home({ onTabChange }: HomeProps) {
       {/* Agent Grid */}
       <div className="flex-1 p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {/* Add Agent Card */}
+          <div
+            onClick={() => setShowAddAgent(true)}
+            className="bg-white rounded-lg shadow-sm border-2 border-dashed border-gray-300 p-6 transition-all duration-200 hover:shadow-lg hover:border-[var(--primary-color)] cursor-pointer group"
+          >
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="p-3 rounded-lg bg-gray-100 text-gray-600 mb-4 group-hover:bg-[var(--primary-color)] group-hover:text-white transition-colors">
+                <Plus className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Add New Agent</h3>
+              <p className="text-sm text-gray-500">Create a custom agent for your data source</p>
+            </div>
+          </div>
+
           {agents.map((agent) => (
             <div
               key={agent.id}
@@ -200,6 +216,11 @@ export function Home({ onTabChange }: HomeProps) {
       {/* NCC Agent Chat Modal */}
       {showNCCChat && (
         <NCCAgentChat onClose={() => setShowNCCChat(false)} />
+      )}
+
+      {/* Add Agent Configuration Modal */}
+      {showAddAgent && (
+        <AgentConfigView onClose={() => setShowAddAgent(false)} />
       )}
     </div>
   );
