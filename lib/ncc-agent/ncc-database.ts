@@ -22,7 +22,11 @@ export class NCCDatabase {
 
     console.log('Supabase config check:', {
       url: supabaseUrl ? 'SET' : 'NOT SET',
-      key: supabaseKey ? 'SET' : 'NOT SET'
+      key: supabaseKey ? 'SET' : 'NOT SET',
+      keyLength: supabaseKey?.length,
+      keyStart: supabaseKey?.substring(0, 20),
+      keyEnd: supabaseKey?.substring(supabaseKey.length - 10),
+      urlValue: supabaseUrl
     });
 
     if (!supabaseUrl || !supabaseKey) {

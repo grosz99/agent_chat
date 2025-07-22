@@ -2,9 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { NCCDatabase } from '@/lib/ncc-agent/ncc-database';
 import { KnowledgeBase } from '@/lib/ncc-agent/knowledge-base';
 
-// Initialize services
-const nccDatabase = new NCCDatabase();
-const knowledgeBase = new KnowledgeBase();
+// Initialize services on demand to ensure env vars are loaded
+let nccDatabase: NCCDatabase | null = null;
+let knowledgeBase: KnowledgeBase | null = null;
+
+function getNCCDatabase() {
+  if (!nccDatabase) {
+    console.log('Initializing NCC Database...');
+    nccDatabase = new NCCDatabase();
+  }
+  return nccDatabase;
+}
+
+function getKnowledgeBase() {
+  if (!knowledgeBase) {
+    knowledgeBase = new KnowledgeBase();
+  }
+  return knowledgeBase;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,11 +30,11 @@ export async function POST(request: NextRequest) {
       console.log('NCC Agent chat request:', message);
       
       // Get data from NCC database
-      const dbResult = await nccDatabase.queryData(message);
+      const dbResult = await getNCCDatabase().queryData(message);
       console.log('Database result:', dbResult);
       
       // Get context from knowledge base
-      const kbContext = knowledgeBase.getContextForQuery(message);
+      const kbContext = getKnowledgeBase().getContextForQuery(message);
       console.log('Knowledge base context length:', kbContext.length);
       
       // Prepare context for OpenAI
@@ -89,7 +104,7 @@ RESPONSE STYLE:
         status: 'success',
         debug: {
           db_result: dbResult.error ? 'error' : 'success',
-          kb_docs: knowledgeBase.getAllDocuments().length,
+          kb_docs: getKnowledgeBase().getAllDocuments().length,
           openai_used: !!openaiData.choices?.[0]?.message?.content
         }
       });
@@ -99,7 +114,7 @@ RESPONSE STYLE:
       // Upload file to knowledge base
       const { filename, content, type } = body;
       
-      const result = knowledgeBase.addDocument(filename, content, type);
+      const result = getKnowledgeBase().addDocument(filename, content, type);
       return NextResponse.json({
         status: result.status,
         message: result.status === 'success' ? `File ${filename} added to knowledge base` : 'Upload failed'
@@ -108,7 +123,7 @@ RESPONSE STYLE:
 
     if (action === 'list-files') {
       // List knowledge base files
-      const documents = knowledgeBase.getAllDocuments();
+      const documents = getKnowledgeBase().getAllDocuments();
       return NextResponse.json({
         files: documents.map(doc => ({
           filename: doc.filename,
@@ -133,14 +148,14 @@ RESPONSE STYLE:
 export async function GET(request: NextRequest) {
   try {
     // Health check for NCC agent
-    const dbHealth = await nccDatabase.testConnection();
+    const dbHealth = await getNCCDatabase().testConnection();
     
     return NextResponse.json({
       status: 'healthy',
       ncc_agent: 'available',
       database: dbHealth.status,
       knowledge_base: 'available',
-      documents_count: knowledgeBase.getAllDocuments().length
+      documents_count: getKnowledgeBase().getAllDocuments().length
     });
 
   } catch (error) {
